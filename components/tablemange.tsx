@@ -1,5 +1,5 @@
 'use client';
-import React, { SVGProps } from "react";
+import React from "react";
 import {
     Table,
     TableHeader,
@@ -16,23 +16,17 @@ import {
     Chip,
     User,
     Pagination,
-    Selection,
-    ChipProps,
-    SortDescriptor,
 } from "@heroui/react";
-
-export type IconSvgProps = SVGProps<SVGSVGElement> & {
-    size?: number;
-};
 
 export const columns = [
     { name: "ID", uid: "id", sortable: true },
     { name: "NAME", uid: "name", sortable: true },
     { name: "AGE", uid: "age", sortable: true },
+    { name: "STUDENT ID", uid: "studentId" },
     { name: "ROLE", uid: "role", sortable: true },
+    { name: "SCORE", uid: "score" },
     { name: "TEAM", uid: "team" },
     { name: "EMAIL", uid: "email" },
-    { name: "SCORE", uid: "score",sortable: true },
     { name: "STATUS", uid: "status", sortable: true },
     { name: "ACTIONS", uid: "actions" },
 ];
@@ -43,213 +37,272 @@ export const statusOptions = [
     { name: "Vacation", uid: "vacation" },
 ];
 
-export const users = [
+function getRandomRole() {
+    return Math.random() > 0.5 ? "Professor" : "Student";
+  }
+  
+  function getRandomDepartment() {
+    const departments = ["Computer Science", "Electrical Engineering", "Mechanical Engineering", "Civil Engineering", "Business Administration"];
+    return departments[Math.floor(Math.random() * departments.length)];
+  }
+  
+  function getRandomStudentId() {
+    return Math.floor(10000 + Math.random() * 90000); // Generate random 5-digit student ID
+  }
+  
+  function getRandomScore() {
+    return Math.floor(Math.random() * 100) + 1; // Random score between 1 and 100
+  }
+  
+  export const users = [
     {
-        id: 1,
-        name: "Tony Reichert",
-        role: "CEO",
-        team: "Management",
-        status: "active",
-        age: "29",
-        avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-        email: "tony.reichert@example.com",
+      id: 1,
+      name: "Tony Reichert",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "29",
+      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+      email: "tony.reichert@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 2,
-        name: "Zoey Lang",
-        role: "Tech Lead",
-        team: "Development",
-        status: "paused",
-        age: "25",
-        avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-        email: "zoey.lang@example.com",
+      id: 2,
+      name: "Zoey Lang",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "paused",
+      age: "25",
+      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+      email: "zoey.lang@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 3,
-        name: "Jane Fisher",
-        role: "Sr. Dev",
-        team: "Development",
-        status: "active",
-        age: "22",
-        avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-        email: "jane.fisher@example.com",
+      id: 3,
+      name: "Jane Fisher",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "22",
+      avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+      email: "jane.fisher@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 4,
-        name: "William Howard",
-        role: "C.M.",
-        team: "Marketing",
-        status: "vacation",
-        age: "28",
-        avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
-        email: "william.howard@example.com",
+      id: 4,
+      name: "William Howard",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "vacation",
+      age: "28",
+      avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
+      email: "william.howard@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 5,
-        name: "Kristen Copper",
-        role: "S. Manager",
-        team: "Sales",
-        status: "active",
-        age: "24",
-        avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
-        email: "kristen.cooper@example.com",
+      id: 5,
+      name: "Kristen Copper",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "24",
+      avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
+      email: "kristen.cooper@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 6,
-        name: "Brian Kim",
-        role: "P. Manager",
-        team: "Management",
-        age: "29",
-        avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-        email: "brian.kim@example.com",
-        status: "active",
+      id: 6,
+      name: "Brian Kim",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      age: "29",
+      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+      email: "brian.kim@example.com",
+      status: "Active",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 7,
-        name: "Michael Hunt",
-        role: "Designer",
-        team: "Design",
-        status: "paused",
-        age: "27",
-        avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
-        email: "michael.hunt@example.com",
+      id: 7,
+      name: "Michael Hunt",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "paused",
+      age: "27",
+      avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
+      email: "michael.hunt@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 8,
-        name: "Samantha Brooks",
-        role: "HR Manager",
-        team: "HR",
-        status: "active",
-        age: "31",
-        avatar: "https://i.pravatar.cc/150?u=a042581f4e27027008d",
-        email: "samantha.brooks@example.com",
+      id: 8,
+      name: "Samantha Brooks",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "31",
+      avatar: "https://i.pravatar.cc/150?u=a042581f4e27027008d",
+      email: "samantha.brooks@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 9,
-        name: "Frank Harrison",
-        role: "F. Manager",
-        team: "Finance",
-        status: "vacation",
-        age: "33",
-        avatar: "https://i.pravatar.cc/150?img=4",
-        email: "frank.harrison@example.com",
+      id: 9,
+      name: "Frank Harrison",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "vacation",
+      age: "33",
+      avatar: "https://i.pravatar.cc/150?img=4",
+      email: "frank.harrison@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 10,
-        name: "Emma Adams",
-        role: "Ops Manager",
-        team: "Operations",
-        status: "active",
-        age: "35",
-        avatar: "https://i.pravatar.cc/150?img=5",
-        email: "emma.adams@example.com",
+      id: 10,
+      name: "Emma Adams",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "35",
+      avatar: "https://i.pravatar.cc/150?img=5",
+      email: "emma.adams@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 11,
-        name: "Brandon Stevens",
-        role: "Jr. Dev",
-        team: "Development",
-        status: "active",
-        age: "22",
-        avatar: "https://i.pravatar.cc/150?img=8",
-        email: "brandon.stevens@example.com",
+      id: 11,
+      name: "Brandon Stevens",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "22",
+      avatar: "https://i.pravatar.cc/150?img=8",
+      email: "brandon.stevens@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 12,
-        name: "Megan Richards",
-        role: "P. Manager",
-        team: "Product",
-        status: "paused",
-        age: "28",
-        avatar: "https://i.pravatar.cc/150?img=10",
-        email: "megan.richards@example.com",
+      id: 12,
+      name: "Megan Richards",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "paused",
+      age: "28",
+      avatar: "https://i.pravatar.cc/150?img=10",
+      email: "megan.richards@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 13,
-        name: "Oliver Scott",
-        role: "S. Manager",
-        team: "Security",
-        status: "active",
-        age: "37",
-        avatar: "https://i.pravatar.cc/150?img=12",
-        email: "oliver.scott@example.com",
+      id: 13,
+      name: "Oliver Scott",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "37",
+      avatar: "https://i.pravatar.cc/150?img=12",
+      email: "oliver.scott@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 14,
-        name: "Grace Allen",
-        role: "M. Specialist",
-        team: "Marketing",
-        status: "active",
-        age: "30",
-        avatar: "https://i.pravatar.cc/150?img=16",
-        email: "grace.allen@example.com",
+      id: 14,
+      name: "Grace Allen",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "30",
+      avatar: "https://i.pravatar.cc/150?img=16",
+      email: "grace.allen@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 15,
-        name: "Noah Carter",
-        role: "IT Specialist",
-        team: "I. Technology",
-        status: "paused",
-        age: "31",
-        avatar: "https://i.pravatar.cc/150?img=15",
-        email: "noah.carter@example.com",
+      id: 15,
+      name: "Noah Carter",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "paused",
+      age: "31",
+      avatar: "https://i.pravatar.cc/150?img=15",
+      email: "noah.carter@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 16,
-        name: "Ava Perez",
-        role: "Manager",
-        team: "Sales",
-        status: "active",
-        age: "29",
-        avatar: "https://i.pravatar.cc/150?img=20",
-        email: "ava.perez@example.com",
+      id: 16,
+      name: "Ava Perez",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "29",
+      avatar: "https://i.pravatar.cc/150?img=20",
+      email: "ava.perez@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 17,
-        name: "Liam Johnson",
-        role: "Data Analyst",
-        team: "Analysis",
-        status: "active",
-        age: "28",
-        avatar: "https://i.pravatar.cc/150?img=33",
-        email: "liam.johnson@example.com",
+      id: 17,
+      name: "Liam Johnson",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "28",
+      avatar: "https://i.pravatar.cc/150?img=33",
+      email: "liam.johnson@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 18,
-        name: "Sophia Taylor",
-        role: "QA Analyst",
-        team: "Testing",
-        status: "active",
-        age: "27",
-        avatar: "https://i.pravatar.cc/150?img=29",
-        email: "sophia.taylor@example.com",
+      id: 18,
+      name: "Sophia Taylor",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "27",
+      avatar: "https://i.pravatar.cc/150?img=29",
+      email: "sophia.taylor@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 19,
-        name: "Lucas Harris",
-        role: "Administrator",
-        team: "Information Technology",
-        status: "paused",
-        age: "32",
-        avatar: "https://i.pravatar.cc/150?img=50",
-        email: "lucas.harris@example.com",
+      id: 19,
+      name: "Lucas Harris",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "paused",
+      age: "32",
+      avatar: "https://i.pravatar.cc/150?img=50",
+      email: "lucas.harris@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
     {
-        id: 20,
-        name: "Mia Robinson",
-        role: "Coordinator",
-        team: "Operations",
-        status: "active",
-        age: "26",
-        avatar: "https://i.pravatar.cc/150?img=45",
-        email: "mia.robinson@example.com",
+      id: 20,
+      name: "Mia Robinson",
+      role: getRandomRole(),
+      team: getRandomDepartment(),
+      status: "active",
+      age: "26",
+      avatar: "https://i.pravatar.cc/150?img=45",
+      email: "mia.robinson@example.com",
+      studentId: getRandomStudentId(),
+      score: getRandomScore(),
     },
-];
+  ];
+  
 
-export function capitalize(s: string): string {
+export function capitalize(s) {
     return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
 }
-export const PlusIcon = ({ size = 24, width, height, ...props }: IconSvgProps) => {
+
+export const PlusIcon = ({ size = 32, width, height, ...props }) => {
     return (
         <svg
             aria-hidden="true"
@@ -275,7 +328,7 @@ export const PlusIcon = ({ size = 24, width, height, ...props }: IconSvgProps) =
     );
 };
 
-export const VerticalDotsIcon = ({ size = 24, width, height, ...props }: IconSvgProps) => {
+export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => {
     return (
         <svg
             aria-hidden="true"
@@ -295,7 +348,7 @@ export const VerticalDotsIcon = ({ size = 24, width, height, ...props }: IconSvg
     );
 };
 
-export const SearchIcon = (props: IconSvgProps) => {
+export const SearchIcon = (props) => {
     return (
         <svg
             aria-hidden="true"
@@ -325,7 +378,7 @@ export const SearchIcon = (props: IconSvgProps) => {
     );
 };
 
-export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgProps) => {
+export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }) => {
     return (
         <svg
             aria-hidden="true"
@@ -349,37 +402,25 @@ export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }: IconSvgPro
     );
 };
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
+const statusColorMap = {
     active: "success",
     paused: "danger",
     vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions", "score"];
-
-type User = (typeof users)[0];
+const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions", "score","studentId"];
 
 export default function App() {
     const [filterValue, setFilterValue] = React.useState("");
-    const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
-    const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-        new Set(INITIAL_VISIBLE_COLUMNS),
-    );
-    interface SortDescriptor {
-        column: string;
-        direction: 'ascending' | 'descending';
-    }
-
-
-    const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
+    const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+    const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
+    const [statusFilter, setStatusFilter] = React.useState("all");
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [sortDescriptor, setSortDescriptor] = React.useState({
         column: "age",
         direction: "ascending",
     });
     const [page, setPage] = React.useState(1);
-
-    const pages = Math.ceil(users.length / rowsPerPage);
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -406,6 +447,8 @@ export default function App() {
         return filteredUsers;
     }, [users, filterValue, statusFilter]);
 
+    const pages = Math.ceil(filteredItems.length / rowsPerPage);
+
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -414,64 +457,61 @@ export default function App() {
     }, [page, filteredItems, rowsPerPage]);
 
     const sortedItems = React.useMemo(() => {
-        return [...items].sort((a: User, b: User) => {
-            const first = a[sortDescriptor.column as keyof User] as number;
-            const second = b[sortDescriptor.column as keyof User] as number;
+        return [...items].sort((a, b) => {
+            const first = a[sortDescriptor.column];
+            const second = b[sortDescriptor.column];
             const cmp = first < second ? -1 : first > second ? 1 : 0;
 
             return sortDescriptor.direction === "descending" ? -cmp : cmp;
         });
     }, [sortDescriptor, items]);
 
-    const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-        const cellValue = user[columnKey as keyof User];
+    const renderCell = React.useCallback((user, columnKey) => {
+        const cellValue = user[columnKey];
 
         switch (columnKey) {
             case "name":
                 return (
                     <User
-                        avatarProps={{ radius: "full", size: "sm", src: user.avatar }}
-                        classNames={{
-                            description: "text-default-500",
-                        }}
-                        description={user.email}
-                        name={cellValue}
-                    >
+                        avatarProps={{ radius: "lg", src: user.avatar }}
+                        description={<p className="text-base font-bold">{user.email}</p>}
+                        name={<p className="text-base font-bold">{cellValue}</p>} // เพิ่มขนาดฟอนต์ของ name และทำให้เป็นตัวหนา
+                        >
                         {user.email}
                     </User>
-                );
-            case "score":
-                return (
-                    <div className="flex flex-col">
-                        <p className="text-bold text-small capitalize">{cellValue}</p>
-                        <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p>
-                    </div>
-                );
-            case "status":
-                return (
-                    <Chip
-                        className="capitalize border-none gap-1 text-default-600"
-                        color={statusColorMap[user.status]}
-                        size="sm"
-                        variant="dot"
-                    >
-                        {cellValue}
-                    </Chip>
                 );
             case "role":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-small capitalize">{cellValue}</p>
-                        <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p>
+                        <p className="text-bold text-base capitalize">{cellValue}</p>
+                        <p className="text-bold text-small capitalize text-default-400">{user.team}</p>
                     </div>
+                );
+            case "score":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-base capitalize">{cellValue} point</p>
+                    </div>
+                );
+                case "studentId":
+                    return (
+                        <div className="flex flex-col">
+                            <p className="text-bold text-base capitalize">{cellValue}</p>
+                        </div>
+                    );
+            case "status":
+                return (
+                    <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
+                        {cellValue}
+                    </Chip>
                 );
             case "actions":
                 return (
                     <div className="relative flex justify-end items-center gap-2">
-                        <Dropdown className="bg-background border-1 border-default-200">
+                        <Dropdown>
                             <DropdownTrigger>
-                                <Button isIconOnly radius="full" size="sm" variant="light">
-                                    <VerticalDotsIcon className="text-default-400" />
+                                <Button isIconOnly size="sm" variant="light">
+                                    <VerticalDotsIcon className="text-default-300" />
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
@@ -487,12 +527,24 @@ export default function App() {
         }
     }, []);
 
-    const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const onNextPage = React.useCallback(() => {
+        if (page < pages) {
+            setPage(page + 1);
+        }
+    }, [page, pages]);
+
+    const onPreviousPage = React.useCallback(() => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    }, [page]);
+
+    const onRowsPerPageChange = React.useCallback((e) => {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
 
-    const onSearchChange = React.useCallback((value?: string) => {
+    const onSearchChange = React.useCallback((value) => {
         if (value) {
             setFilterValue(value);
             setPage(1);
@@ -501,32 +553,28 @@ export default function App() {
         }
     }, []);
 
+    const onClear = React.useCallback(() => {
+        setFilterValue("");
+        setPage(1);
+    }, []);
+
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
                 <div className="flex justify-between gap-3 items-end">
                     <Input
                         isClearable
-                        classNames={{
-                            base: "w-full sm:max-w-[44%]",
-                            inputWrapper: "border-1",
-                        }}
+                        className="w-full sm:max-w-[44%]"
                         placeholder="Search by name..."
-                        size="sm"
-                        startContent={<SearchIcon className="text-default-300" />}
+                        startContent={<SearchIcon />}
                         value={filterValue}
-                        variant="bordered"
-                        onClear={() => setFilterValue("")}
+                        onClear={() => onClear()}
                         onValueChange={onSearchChange}
                     />
                     <div className="flex gap-3">
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button
-                                    endContent={<ChevronDownIcon className="text-small" />}
-                                    size="sm"
-                                    variant="flat"
-                                >
+                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
                                     Status
                                 </Button>
                             </DropdownTrigger>
@@ -547,11 +595,7 @@ export default function App() {
                         </Dropdown>
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button
-                                    endContent={<ChevronDownIcon className="text-small" />}
-                                    size="sm"
-                                    variant="flat"
-                                >
+                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
                                     Columns
                                 </Button>
                             </DropdownTrigger>
@@ -570,7 +614,7 @@ export default function App() {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Button className="bg-foreground text-background" endContent={<PlusIcon />} size="sm">
+                        <Button color="primary" endContent={<PlusIcon />}>
                             Add New
                         </Button>
                     </div>
@@ -581,10 +625,11 @@ export default function App() {
                         Rows per page:
                         <select
                             className="bg-transparent outline-none text-default-400 text-small"
-                            onChange={onRowsPerPageChange}
+                            defaultValue="10"
+                                                        onChange={onRowsPerPageChange}
                         >
                             <option value="5">5</option>
-                            <option value="10">10</option>
+                            <option value="10" >10</option>
                             <option value="15">15</option>
                         </select>
                     </label>
@@ -595,68 +640,50 @@ export default function App() {
         filterValue,
         statusFilter,
         visibleColumns,
-        onSearchChange,
         onRowsPerPageChange,
         users.length,
+        onSearchChange,
         hasSearchFilter,
     ]);
 
     const bottomContent = React.useMemo(() => {
         return (
             <div className="py-2 px-2 flex justify-between items-center">
-                <Pagination
-                    showControls
-                    classNames={{
-                        cursor: "bg-foreground text-background",
-                    }}
-                    color="default"
-                    isDisabled={hasSearchFilter}
-                    page={page}
-                    total={pages}
-                    variant="light"
-                    onChange={setPage}
-                />
-                <span className="text-small text-default-400">
+                <span className="w-[30%] text-small text-default-400">
                     {selectedKeys === "all"
                         ? "All items selected"
-                        : `${selectedKeys.size} of ${items.length} selected`}
+                        : `${selectedKeys.size} of ${filteredItems.length} selected`}
                 </span>
+                <Pagination
+                    isCompact
+                    showControls
+                    showShadow
+                    color="primary"
+                    page={page}
+                    total={pages}
+                    onChange={setPage}
+                />
+                <div className="hidden sm:flex w-[30%] justify-end gap-2">
+                    <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
+                        Previous
+                    </Button>
+                    <Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
+                        Next
+                    </Button>
+                </div>
             </div>
         );
     }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-    const classNames = React.useMemo(
-        () => ({
-            wrapper: ["max-h-[382px]", "max-w-3xl"],
-            th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
-            td: [
-                // changing the rows border radius
-                // first
-                "group-data-[first=true]/tr:first:before:rounded-none",
-                "group-data-[first=true]/tr:last:before:rounded-none",
-                // middle
-                "group-data-[middle=true]/tr:before:rounded-none",
-                // last
-                "group-data-[last=true]/tr:first:before:rounded-none",
-                "group-data-[last=true]/tr:last:before:rounded-none",
-            ],
-        }),
-        [],
-    );
-
     return (
         <Table
-            isCompact
-            removeWrapper
+            isHeaderSticky
             aria-label="Example table with custom cells, pagination and sorting"
             bottomContent={bottomContent}
             bottomContentPlacement="outside"
-            checkboxesProps={{
-                classNames: {
-                    wrapper: "after:bg-foreground after:text-background text-background",
-                },
+            classNames={{
+                wrapper: "max-h-[650px]",
             }}
-            classNames={classNames}
             selectedKeys={selectedKeys}
             selectionMode="multiple"
             sortDescriptor={sortDescriptor}
@@ -686,3 +713,6 @@ export default function App() {
         </Table>
     );
 }
+
+
+

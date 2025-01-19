@@ -37,8 +37,8 @@ export default function App() {
 
   const menuItemspath = [
     { name: "Quest", href: "/quest" },
+    { name: "Management", href: "/managementuser" },
     { name: "Ranking", href: "/ranking" },
-    { name: "Integrations", href: "/integrations" },
   ];
   const menuItems = [
     "Profile",

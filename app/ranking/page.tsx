@@ -1,9 +1,8 @@
-
 // app/page.tsx
 'use client';
 import { useEffect, useState } from 'react';
-import Tablemange from "../../components/tablemange";  // ใช้ PascalCase สำหรับคอมโพเนนต์
-import {Card, CardBody} from "@heroui/react";
+import Tableranking from "../../components/tableranking";  // ใช้ PascalCase สำหรับคอมโพเนนต์
+import { Card, CardBody } from "@heroui/react";
 export default function App() {
   const [isClient, setIsClient] = useState(false);
 
@@ -18,8 +17,8 @@ export default function App() {
   return (
     <Card>
       <CardBody>
-    <Tablemange />
-    </CardBody>
+        <Tableranking />
+      </CardBody>
     </Card>
   );
 }
