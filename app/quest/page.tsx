@@ -63,7 +63,7 @@ export default function App() {
     },
   ];
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [selectedQuest, setSelectedQuest] = useState(null);
 
   const handleAction = (quest) => {
