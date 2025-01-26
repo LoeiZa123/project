@@ -15,7 +15,7 @@ import {
   NavbarMenu,
   Button,
 } from "@heroui/react";
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation'; // ใช้ usePathname
 
 export const AcmeLogo = () => {
@@ -31,11 +31,38 @@ export const AcmeLogo = () => {
   );
 };
 
+
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const pathname = usePathname(); // รับ path ของหน้าปัจจุบัน
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem('user');
+
+      if (!userData) {
+        console.error('No user data found');
+      //  window.location.href = '/login';  // ถ้าไม่มีข้อมูลให้ไปหน้า login
+        return;
+      }
+
+      const parsedUser = JSON.parse(userData);  // แปลงข้อมูลจาก JSON เป็น Object
+
+      if (parsedUser && parsedUser.email) {
+        setUser(parsedUser);  // ถ้าข้อมูลถูกต้อง เก็บข้อมูลลง state
+      } else {
+        console.error('User data is incomplete or malformed');
+        //window.location.href = '/login';  // ถ้าข้อมูลไม่ถูกต้องไปหน้า login
+      }
+    } catch (error) {
+      console.error('Error while parsing user data:', error);
+   //   window.location.href = '/login';  // ถ้าข้อมูล JSON เสียหาย ให้ไปหน้า login
+    }
+  }, []);
 
   const menuItemspath = [
+    { name: "Home", href: "/" },
     { name: "Quest", href: "/quest" },
     { name: "Management", href: "/managementuser" },
     { name: "Ranking", href: "/ranking" },
@@ -55,7 +82,7 @@ export default function App() {
   const showNavbarContent = true;
 
   return (
-    <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+    <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} >
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
@@ -77,34 +104,39 @@ export default function App() {
         </NavbarBrand>
 
         {menuItemspath.map((item) => (
-          <NavbarItem key={item.name} isActive={pathname === item.href}> {/* เช็ค isActive */}
-            <Link
-              href={item.href}
-              className={`text-lg ${pathname === item.href ? "text-primary font-semibold" : "text-foreground no-underline"
-                }`} // เปลี่ยนสีและน้ำหนักข้อความ
-            >
-              {item.name}
-            </Link>
-          </NavbarItem>
+          // ตรวจสอบเงื่อนไข: ถ้าไม่มีผู้ใช้และชื่อเมนูเป็น "Management" หรือ "Quest" จะไม่แสดงเมนู
+          !user && (item.name === "Management" || item.name === "Quest" || item.name === "Ranking") ? null : (
+            <NavbarItem key={item.name} isActive={pathname === item.href}>
+              <Link
+                href={item.href}
+                className={`text-lg ${pathname === item.href ? "text-primary font-semibold" : "text-foreground no-underline"}`}
+              >
+                {item.name}
+              </Link>
+            </NavbarItem>
+          )
         ))}
+
+
       </NavbarContent>
 
       <NavbarContent justify="end">
-        {showNavbarContent && (
+        {!user && (
           <>
             <NavbarItem className="hidden lg:flex">
-              <Link href="#" className="text-lg"> {/* ขยายขนาดข้อความ */}
+              <Link isBlock href="/login" color="foreground" className="text-lg"> {/* ขยายขนาดข้อความ */}
                 Login
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="warning" href="#" variant="flat" size="lg"> {/* ขยายขนาดปุ่ม */}
+
+              <Link isBlock href="/register" color="foreground" className="text-lg"> {/* ขยายขนาดข้อความ */}
                 Sign Up
-              </Button>
+              </Link>
             </NavbarItem>
           </>
         )}
-        {!showNavbarContent && (
+        {user && (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar
@@ -118,10 +150,21 @@ export default function App() {
                 src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
               />
             </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownMenu aria-label="Profile Actions" variant="flat" onAction={(key) => {
+              if (key === "logout") {
+                // ลบข้อมูลผู้ใช้จาก localStorage
+                localStorage.removeItem('user');
+
+                // ลบคุกกี้ session
+                document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+                // เปลี่ยนหน้าไปยัง /login
+                window.location.href = '/';
+              }
+            }}>
               <DropdownItem key="profile" className="h-14 gap-2">
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">zoey@example.com</p>
+                <p className="font-semibold"> {user ? user.email : 'No email available'}</p>
               </DropdownItem>
               <DropdownItem key="settings">My Settings</DropdownItem>
               <DropdownItem key="team_settings">Team Settings</DropdownItem>

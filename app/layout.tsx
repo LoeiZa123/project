@@ -1,16 +1,28 @@
-// app/layout.tsx
 'use client';
-// globals.css includes @tailwind directives
-// adjust the path if necessary
-import "@/styles/globals.css";
-import {Providers} from "./providers";
-import NavbarTop from "../components/navbar";  // ใช้ PascalCase สำหรับคอมโพเนนต์
 
-export default function RootLayout({children}: { children: React.ReactNode }) {
+import "@/styles/globals.css";
+import { Providers } from "./providers";
+import NavbarTop from "../components/navbar";
+import { usePathname } from "next/navigation"; // นำเข้า usePathname
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname(); // ดึงเส้นทางปัจจุบัน
+
+  // เช็คว่า pathname เป็น "/login" หรือไม่
+  const shouldShowNavbar = pathname !== "/register" && pathname !== "/login";
+
   return (
-    <html lang="en" className='dark'>
-      <body>
-        <NavbarTop />
+    <html lang="en" className="dark">
+      <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Acme</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet" />
+      </head>
+      <body className="font-roboto">
+        {shouldShowNavbar && <NavbarTop />}
         <Providers>
           {children}
         </Providers>
