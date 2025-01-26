@@ -1,9 +1,9 @@
 'use client';
 
 import { Card, CardBody } from "@heroui/react";
-import Circles from "../components/circles";
-import Kpistat from "../components/kpistat";
-import Charts from "../components/chart";
+import Circles from "../../components/circles";
+import Kpistat from "../../components/kpistat";
+import Charts from "../../components/chart";
 
 import Image from 'next/image';
 

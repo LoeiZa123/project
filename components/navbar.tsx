@@ -43,7 +43,7 @@ export default function App() {
 
       if (!userData) {
         console.error('No user data found');
-      //  window.location.href = '/login';  // ถ้าไม่มีข้อมูลให้ไปหน้า login
+        //  window.location.href = '/login';  // ถ้าไม่มีข้อมูลให้ไปหน้า login
         return;
       }
 
@@ -57,13 +57,14 @@ export default function App() {
       }
     } catch (error) {
       console.error('Error while parsing user data:', error);
-   //   window.location.href = '/login';  // ถ้าข้อมูล JSON เสียหาย ให้ไปหน้า login
+      //   window.location.href = '/login';  // ถ้าข้อมูล JSON เสียหาย ให้ไปหน้า login
     }
   }, []);
 
   const menuItemspath = [
     { name: "Home", href: "/" },
     { name: "Quest", href: "/quest" },
+    { name: "Dashboard", href: "/dashboard" },
     { name: "Management", href: "/managementuser" },
     { name: "Ranking", href: "/ranking" },
   ];
@@ -109,13 +110,19 @@ export default function App() {
             <NavbarItem key={item.name} isActive={pathname === item.href}>
               <Link
                 href={item.href}
-                className={`text-lg ${pathname === item.href ? "text-primary font-semibold" : "text-foreground no-underline"}`}
+                style={{
+                  fontSize: "1.125rem", // ขนาดตัวอักษร
+                  color: pathname === item.href ? "#2563eb" : "#4b5563", // ใช้สีตามเงื่อนไข
+                  fontWeight: pathname === item.href ? "600" : "normal", // ใช้ font-weight เมื่อ active
+                  textDecoration: pathname === item.href ? "none" : "underline" // ไม่มีเส้นใต้เมื่อ active
+                }}
               >
                 {item.name}
               </Link>
             </NavbarItem>
           )
         ))}
+
 
 
       </NavbarContent>

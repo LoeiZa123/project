@@ -26,11 +26,13 @@
   "@react-aria/ssr": "3.9.7",
   "@react-aria/visually-hidden": "3.8.18",
   "bcrypt": "^5.1.1",
-  "clsx": "2.1.1",
+  "class-variance-authority": "^0.7.1",
+  "clsx": "^2.1.1",
   "cookie": "^1.0.2",
   "framer-motion": "11.13.1",
   "intl-messageformat": "^10.5.0",
   "jsonwebtoken": "^9.0.2",
+  "lucide-react": "^0.474.0",
   "next": "15.0.4",
   "next-themes": "^0.4.4",
   "pg": "^8.13.1",
@@ -38,7 +40,9 @@
   "react-dom": "18.3.1",
   "react-icons": "^5.4.0",
   "recharts": "^2.15.0",
-  "sweetalert2": "^11.15.10"
+  "sweetalert2": "^11.15.10",
+  "tailwind-merge": "^2.6.0",
+  "tailwindcss-animate": "^1.0.7"
  },
  "devDependencies": {
   "@next/eslint-plugin-next": "15.0.4",

@@ -1,8 +1,8 @@
-"use client";
+"use client"; 
 
 import React from "react";
-import {Button, Card, Chip, cn} from "@heroui/react";
-import {Icon} from "@iconify/react";
+import { Button, Card, Chip, cn } from "@heroui/react";
+import { Icon } from "@iconify/react";
 
 const data = [
   {
@@ -33,8 +33,8 @@ const data = [
 
 export default function Component() {
   return (
-    <dl className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-      {data.map(({title, value, change, changeType, iconName, trendChipPosition}, index) => (
+    <dl className="flex flex-col gap-5 w-full">
+      {data.map(({ title, value, change, changeType, iconName, trendChipPosition }, index) => (
         <Card key={index} className="border border-transparent dark:border-default-100">
           <div className="flex p-4">
             <div
