@@ -11,6 +11,7 @@ import {
     User,
     Chip,
     Tooltip,
+    Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Avatar, Progress, Image
 } from "@heroui/react";
 
 // Define the columns for Rank, Score, and Eye icon
@@ -23,12 +24,12 @@ export const columns = [
 ];
 function getRandomRole() {
     return Math.random() > 0.5 ? "Professor" : "Student";
-  }
-  
-  function getRandomDepartment() {
+}
+
+function getRandomDepartment() {
     const departments = ["Computer Science", "Electrical Engineering", "Mechanical Engineering", "Civil Engineering", "Business Administration"];
     return departments[Math.floor(Math.random() * departments.length)];
-  }
+}
 // Random score generator function (within a range)
 const getRandomScore = () => {
     return Math.floor(Math.random() * 600) + 100; // Random score between 100 to 500
@@ -144,7 +145,7 @@ export const users = [
         avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
         email: "kristen.cooper@example.com",
     },
-    
+
 ];
 // Score mapping based on rank
 const getRankScore = (score) =>
@@ -196,100 +197,25 @@ export const EyeIcon = (props) => {
     );
 };
 
-export const DeleteIcon = (props) => {
-    return (
-        <svg
-            aria-hidden="true"
-            fill="none"
-            focusable="false"
-            height="1em"
-            role="presentation"
-            viewBox="0 0 20 20"
-            width="1em"
-            {...props}
-        >
-            <path
-                d="M17.5 4.98332C14.725 4.70832 11.9333 4.56665 9.15 4.56665C7.5 4.56665 5.85 4.64998 4.2 4.81665L2.5 4.98332"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-            />
-            <path
-                d="M7.08331 4.14169L7.26665 3.05002C7.39998 2.25835 7.49998 1.66669 8.90831 1.66669H11.0916C12.5 1.66669 12.6083 2.29169 12.7333 3.05835L12.9166 4.14169"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-            />
-            <path
-                d="M15.7084 7.61664L15.1667 16.0083C15.075 17.3166 15 18.3333 12.675 18.3333H7.32502C5.00002 18.3333 4.92502 17.3166 4.83335 16.0083L4.29169 7.61664"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-            />
-            <path
-                d="M8.60834 13.75H11.3833"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-            />
-            <path
-                d="M7.91669 10.4167H12.0834"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-            />
-        </svg>
-    );
+const player = {
+    name: 'John Doe',
+    username: 'johndoe123',
+    level: 10,
+    totalPoints: 2450,
+    achievements: 15,
+    avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
+    bio: 'Passionate gamer and environmental advocate. Always striving to reach new heights in every game I play!',
+    questsCompleted: 8,
+    totalQuests: 18,
 };
 
-export const EditIcon = (props) => {
-    return (
-        <svg
-            aria-hidden="true"
-            fill="none"
-            focusable="false"
-            height="1em"
-            role="presentation"
-            viewBox="0 0 20 20"
-            width="1em"
-            {...props}
-        >
-            <path
-                d="M11.05 3.00002L4.20835 10.2417C3.95002 10.5167 3.70002 11.0584 3.65002 11.4334L3.34169 14.1334C3.23335 15.1084 3.93335 15.775 4.90002 15.6084L7.58335 15.15C7.95835 15.0834 8.48335 14.8084 8.74168 14.525L15.5834 7.28335C16.7667 6.03335 17.3 4.60835 15.4583 2.86668C13.625 1.14168 12.2334 1.75002 11.05 3.00002Z"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit={10}
-                strokeWidth={1.5}
-            />
-            <path
-                d="M9.90833 4.20831C10.2667 6.50831 12.1333 8.26665 14.45 8.49998"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit={10}
-                strokeWidth={1.5}
-            />
-            <path
-                d="M2.5 18.3333H17.5"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit={10}
-                strokeWidth={1.5}
-            />
-        </svg>
-    );
-};
+
 
 // Render the table with ranked users
 export default function App() {
     let num = 0;
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
     const renderCell = React.useCallback((user, columnKey) => {
         const cellValue = user[columnKey];
         const rank = sortedUsers.findIndex(u => u.id === user.id) + 1;
@@ -314,30 +240,30 @@ export default function App() {
                         <p className="text-bold text-sm capitalize text-default-400">{user.team}</p>
                     </div>
                 );
-                case "score":
-                    return (
-                      <span>
-                        {cellValue !== undefined && !isNaN(cellValue) ? cellValue+" Point " : "N/A"}  
-                        <Chip 
-                          className="capitalize" 
-                          style={{ backgroundColor: rankColorMap[getRankScore(cellValue)], color: '#000000'}} // ใช้ style กับ backgroundColor
-                          size="base" 
-                          variant="flat"
+            case "score":
+                return (
+                    <span>
+                        {cellValue !== undefined && !isNaN(cellValue) ? cellValue + " Point " : "N/A"}
+                        <Chip
+                            className="capitalize"
+                            style={{ backgroundColor: rankColorMap[getRankScore(cellValue)], color: '#000000' }} // ใช้ style กับ backgroundColor
+                            size="base"
+                            variant="flat"
                         >
-                          {getRankScore(cellValue)}
+                            {getRankScore(cellValue)}
                         </Chip>
-                      </span>
-                    );  // Display score
-                  
+                    </span>
+                );  // Display score
+
             case "actions":
                 return (
                     <div className="relative flex items-center justify-center gap-2">
-                    <Tooltip content="Details">
-                        <span className="text-3xl text-default-400 cursor-pointer active:opacity-50">
-                            <EyeIcon />
-                        </span>
-                    </Tooltip>
-                </div>           
+                        <Tooltip content="Details">
+                            <span className="text-3xl text-default-400 cursor-pointer active:opacity-50" onClick={onOpen}>
+                                <EyeIcon />
+                            </span>
+                        </Tooltip>
+                    </div>
                 );
             default:
                 return cellValue;
@@ -346,21 +272,119 @@ export default function App() {
 
 
     return (
-        <Table aria-label="Ranking table">
-            <TableHeader columns={columns}>
-                {(column) => (
-                    <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-                        {column.name}
-                    </TableColumn>
-                )}
-            </TableHeader>
-            <TableBody items={sortedUsers}>
-                {(item, index) => (
-                    <TableRow key={item.id}>
-                        {(columnKey) => <TableCell>{renderCell(item, columnKey, index)}</TableCell>}
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
+        <div>
+            <Table aria-label="Ranking table">
+                <TableHeader columns={columns}>
+                    {(column) => (
+                        <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+                            {column.name}
+                        </TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody items={sortedUsers}>
+                    {(item, index) => (
+                        <TableRow key={item.id}>
+                            {(columnKey) => <TableCell>{renderCell(item, columnKey, index)}</TableCell>}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent className="w-full max-w-screen-xl">
+                    {(onClose) => (
+                        <div className="flex flex-col md:flex-row  justify-between  from-gray-900 via-gray-800 to-gray-700 p-8 rounded-lg shadow-2xl">
+                            {/* Left Section: Profile Avatar & Basic Info */}
+                            <div className="flex flex-col items-center space-y-6 md:w-1/4 bg-gray-900 p-5 rounded-xl h-full shadow-lg flex-grow">
+                                {/* Profile Picture */}
+                                <Avatar
+                                    src={player?.avatarUrl}
+                                    alt={player?.name}
+                                    size="2xl"
+                                    className="border-8 border-yellow-400 shadow-xl"
+                                />
+                                {/* Basic Info */}
+                                <div className="space-y-4 text-center">
+                                    <p className="text-3xl font-semibold text-white">{player?.name}</p>
+                                    <p className="text-2xl text-gray-300">Username: {player?.username}</p>
+                                    <p className="text-xl text-gray-400">Level: {player?.level}</p>
+                                    <p className="text-xl text-gray-400">Total Points: {player?.totalPoints}</p>
+                                    <p className="text-xl text-gray-400">Achievements: {player?.achievements}</p>
+
+                                </div>
+                                <div>
+                                <Image
+                                    alt="HeroUI hero Image"
+                                    src="/acviment/badge.png"
+                                    width={150}
+                                />
+                                </div>
+                                <div>
+                                <Image
+                                    alt="HeroUI hero Image"
+                                    src="/acviment/trophy.png"
+                                    width={150}
+                                />
+                                </div>
+                                <div>
+                                <Image
+                                    alt="HeroUI hero Image"
+                                    src="/acviment/wreath.png"
+                                    width={150}
+                                />
+                                </div>
+                            </div>
+
+                            {/* Right Section: Progress & Bio */}
+                            <div className="w-full md:w-2/2 ml-4 bg-gray-900 p-6 rounded-xl shadow-lg">
+                                {/* Player's Progress */}
+                                <div className="space-y-6 mb-8">
+                                    <p className="font-semibold text-2xl text-white">Quest Progress:</p>
+                                    {player?.questsCompleted ? (
+                                        <div className="text-white">
+                                            <p className="text-lg mb-4">
+                                                Completed Quests: {player?.questsCompleted} / {player?.totalQuests}
+                                            </p>
+                                            <Progress
+                                                value={(player?.questsCompleted / player?.totalQuests) * 100}
+                                                className="mt-2 h-2 bg-green-500 rounded"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <p className="text-gray-500">No quest completed yet.</p>
+                                    )}
+                                </div>
+
+                                {/* Achievements */}
+                                <div className="space-y-4 mb-8">
+                                    <p className="font-semibold text-2xl text-white">Achievements:</p>
+                                    {player?.achievements > 0 ? (
+                                        <ul className="list-disc pl-6 space-y-2 text-gray-300">
+                                            {[...Array(player?.achievements)].map((_, index) => (
+                                                <li key={index} className="text-lg">Achievement #{index + 1}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-gray-500">No achievements yet.</p>
+                                    )}
+                                </div>
+
+                                {/* Bio */}
+                                <div className="mt-6">
+                                    <p className="font-semibold text-2xl text-white">About:</p>
+                                    <p className="text-lg text-gray-300">{player?.bio}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </ModalContent>
+            </Modal>
+
+
+
+
+
+
+        </div>
     );
 }

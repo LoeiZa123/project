@@ -43,7 +43,7 @@ export default function App() {
 
       if (!userData) {
         console.error('No user data found');
-        //  window.location.href = '/login';  // ถ้าไม่มีข้อมูลให้ไปหน้า login
+        window.location.href = '/login';  // ถ้าไม่มีข้อมูลให้ไปหน้า login
         return;
       }
 
@@ -53,16 +53,16 @@ export default function App() {
         setUser(parsedUser);  // ถ้าข้อมูลถูกต้อง เก็บข้อมูลลง state
       } else {
         console.error('User data is incomplete or malformed');
-        //window.location.href = '/login';  // ถ้าข้อมูลไม่ถูกต้องไปหน้า login
+        window.location.href = '/login';  // ถ้าข้อมูลไม่ถูกต้องไปหน้า login
       }
     } catch (error) {
       console.error('Error while parsing user data:', error);
-      //   window.location.href = '/login';  // ถ้าข้อมูล JSON เสียหาย ให้ไปหน้า login
+      window.location.href = '/login';  // ถ้าข้อมูล JSON เสียหาย ให้ไปหน้า login
     }
   }, []);
 
   const menuItemspath = [
-    { name: "Home", href: "/" },
+    { name: "Home", href: "/home" },
     { name: "Quest", href: "/quest" },
     { name: "Dashboard", href: "/dashboard" },
     { name: "Management", href: "/managementuser" },
@@ -106,7 +106,7 @@ export default function App() {
 
         {menuItemspath.map((item) => (
           // ตรวจสอบเงื่อนไข: ถ้าไม่มีผู้ใช้และชื่อเมนูเป็น "Management" หรือ "Quest" จะไม่แสดงเมนู
-          !user && (item.name === "Management" || item.name === "Quest" || item.name === "Ranking") ? null : (
+         
             <NavbarItem key={item.name} isActive={pathname === item.href}>
               <Link
                 href={item.href}
@@ -120,7 +120,7 @@ export default function App() {
                 {item.name}
               </Link>
             </NavbarItem>
-          )
+          
         ))}
 
 
@@ -128,22 +128,6 @@ export default function App() {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        {!user && (
-          <>
-            <NavbarItem className="hidden lg:flex">
-              <Link isBlock href="/login" color="foreground" className="text-lg"> {/* ขยายขนาดข้อความ */}
-                Login
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-
-              <Link isBlock href="/register" color="foreground" className="text-lg"> {/* ขยายขนาดข้อความ */}
-                Sign Up
-              </Link>
-            </NavbarItem>
-          </>
-        )}
-        {user && (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar
@@ -184,7 +168,6 @@ export default function App() {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-        )}
       </NavbarContent>
 
       <NavbarMenu>

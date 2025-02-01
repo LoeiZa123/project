@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-// next.config.js
-module.exports = {
+const nextConfig = {
   images: {
-    domains: ['heroui.com'],  // เพิ่มโดเมนที่ต้องการให้ Next.js โหลดภาพจากที่นี่
+    domains: ['heroui.com', 'nextuipro.nyc3.cdn.digitaloceanspaces.com'], // ✅ เพิ่มโดเมนที่ต้องการ
   },
   env: {
     DB_USER: process.env.DB_USER,
@@ -14,4 +11,6 @@ module.exports = {
     DB_NAME: process.env.DB_NAME,
     JWT_SECRET: process.env.JWT_SECRET,
   },
-}
+};
+
+module.exports = nextConfig;

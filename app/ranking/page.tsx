@@ -2,11 +2,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Tableranking from "../../components/tableranking";  // ใช้ PascalCase สำหรับคอมโพเนนต์
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
+
 export default function App() {
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState(null);
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // สมมุติข้อมูลผู้เล่น
+ 
   useEffect(() => {
     const userData = localStorage.getItem('user');
 
@@ -33,10 +36,12 @@ export default function App() {
   }
 
   return (
+
     <Card>
       <CardBody>
         <Tableranking />
       </CardBody>
     </Card>
+
   );
 }
