@@ -4,6 +4,7 @@ import { Card, CardBody } from "@heroui/react";
 import Circles from "../components/circles";
 import Kpistat from "../components/kpistat";
 import Charts from "../components/chart";
+import { useSession, signIn } from "next-auth/react";
 
 import Image from 'next/image';
 

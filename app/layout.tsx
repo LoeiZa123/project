@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { Providers } from "./providers";
 import NavbarTop from "../components/navbar";
 import { usePathname } from "next/navigation"; // นำเข้า usePathname
-
+import { SessionProvider } from "next-auth/react";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname(); // ดึงเส้นทางปัจจุบัน
 
@@ -12,6 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const shouldShowNavbar = pathname !== "/register" && pathname !== "/login";
 
   return (
+    <SessionProvider>
     <html lang="en" className="dark">
       <head>
         <meta charSet="UTF-8" />
@@ -28,5 +29,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Providers>
       </body>
     </html>
+    </SessionProvider>
   );
 }
