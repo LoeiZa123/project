@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Table,
     TableHeader,
@@ -19,16 +19,27 @@ import {
 } from "@heroui/react";
 
 export const columns = [
-    { name: "ID", uid: "id", sortable: true },
-    { name: "NAME", uid: "name", sortable: true },
-    { name: "AGE", uid: "age", sortable: true },
-    { name: "STUDENT ID", uid: "studentId" },
-    { name: "ROLE", uid: "role", sortable: true },
-    { name: "SCORE", uid: "score" },
-    { name: "TEAM", uid: "team" },
-    { name: "EMAIL", uid: "email" },
-    { name: "STATUS", uid: "status", sortable: true },
-    { name: "ACTIONS", uid: "actions" },
+    { name: "ไอดี", uid: "id", sortable: true },
+    { name: "ชื่อ-นามสกุล", uid: "name", sortable: true },
+    { name: "อายุ", uid: "age", sortable: true },
+    { name: "รหัสนักศึกษา", uid: "studentId" },
+    { name: "อีเมล", uid: "email" },
+    { name: "คะแนน", uid: "score" },
+    { name: "ทีม", uid: "team" },
+    { name: "สถานะ", uid: "status", sortable: true },
+    { name: "จัดการ", uid: "actions" },
+];
+export const columnsQusets = [
+    { name: "ไอดี", uid: "id", sortable: true },
+    { name: "ชื่อเควส", uid: "title", sortable: true },
+    { name: "คะเเนน", uid: "reward", sortable: true },
+    { name: "ระดับความยาก", uid: "difficulty" },
+    { name: "รายละเอียด", uid: "description" },
+    { name: "หมวดหมู่", uid: "email" },
+    { name: "รูป", uid: "image" },
+    { name: "สถานะ", uid: "status", sortable: true },
+    { name: "จัดการ", uid: "actions" },
+
 ];
 
 export const statusOptions = [
@@ -39,264 +50,109 @@ export const statusOptions = [
 
 function getRandomRole() {
     return Math.random() > 0.5 ? "Professor" : "Student";
-  }
-  
-  function getRandomDepartment() {
+}
+
+function getRandomDepartment() {
     const departments = ["Computer Science", "Electrical Engineering", "Mechanical Engineering", "Civil Engineering", "Business Administration"];
     return departments[Math.floor(Math.random() * departments.length)];
-  }
-  
-  function getRandomStudentId() {
+}
+
+function getRandomStudentId() {
     return Math.floor(10000 + Math.random() * 90000); // Generate random 5-digit student ID
-  }
-  
-  function getRandomScore() {
+}
+
+function getRandomScore() {
     return Math.floor(Math.random() * 100) + 1; // Random score between 1 and 100
-  }
-  
-  export const users = [
+}
+
+
+export const quests = [
     {
-      id: 1,
-      name: "Tony Reichert",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "29",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-      email: "tony.reichert@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 1,
+        name: "Tony Reichert",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        status: "active",
+        age: "29",
+        avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+        email: "tony.reichert@example.com",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
     {
-      id: 2,
-      name: "Zoey Lang",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "paused",
-      age: "25",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-      email: "zoey.lang@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 2,
+        name: "Zoey Lang",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        status: "paused",
+        age: "25",
+        avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+        email: "zoey.lang@example.com",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
     {
-      id: 3,
-      name: "Jane Fisher",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "22",
-      avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-      email: "jane.fisher@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 3,
+        name: "Jane Fisher",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        status: "active",
+        age: "22",
+        avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+        email: "jane.fisher@example.com",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
     {
-      id: 4,
-      name: "William Howard",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "vacation",
-      age: "28",
-      avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
-      email: "william.howard@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 4,
+        name: "William Howard",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        status: "vacation",
+        age: "28",
+        avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
+        email: "william.howard@example.com",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
     {
-      id: 5,
-      name: "Kristen Copper",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "24",
-      avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
-      email: "kristen.cooper@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 5,
+        name: "Kristen Copper",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        status: "active",
+        age: "24",
+        avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
+        email: "kristen.cooper@example.com",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
     {
-      id: 6,
-      name: "Brian Kim",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      age: "29",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-      email: "brian.kim@example.com",
-      status: "Active",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 6,
+        name: "Brian Kim",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        age: "29",
+        avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+        email: "brian.kim@example.com",
+        status: "Active",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
     {
-      id: 7,
-      name: "Michael Hunt",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "paused",
-      age: "27",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
-      email: "michael.hunt@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
+        id: 7,
+        name: "Michael Hunt",
+        role: getRandomRole(),
+        team: getRandomDepartment(),
+        status: "paused",
+        age: "27",
+        avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
+        email: "michael.hunt@example.com",
+        studentId: getRandomStudentId(),
+        score: getRandomScore(),
     },
-    {
-      id: 8,
-      name: "Samantha Brooks",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "31",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e27027008d",
-      email: "samantha.brooks@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 9,
-      name: "Frank Harrison",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "vacation",
-      age: "33",
-      avatar: "https://i.pravatar.cc/150?img=4",
-      email: "frank.harrison@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 10,
-      name: "Emma Adams",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "35",
-      avatar: "https://i.pravatar.cc/150?img=5",
-      email: "emma.adams@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 11,
-      name: "Brandon Stevens",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "22",
-      avatar: "https://i.pravatar.cc/150?img=8",
-      email: "brandon.stevens@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 12,
-      name: "Megan Richards",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "paused",
-      age: "28",
-      avatar: "https://i.pravatar.cc/150?img=10",
-      email: "megan.richards@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 13,
-      name: "Oliver Scott",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "37",
-      avatar: "https://i.pravatar.cc/150?img=12",
-      email: "oliver.scott@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 14,
-      name: "Grace Allen",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "30",
-      avatar: "https://i.pravatar.cc/150?img=16",
-      email: "grace.allen@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 15,
-      name: "Noah Carter",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "paused",
-      age: "31",
-      avatar: "https://i.pravatar.cc/150?img=15",
-      email: "noah.carter@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 16,
-      name: "Ava Perez",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "29",
-      avatar: "https://i.pravatar.cc/150?img=20",
-      email: "ava.perez@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 17,
-      name: "Liam Johnson",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "28",
-      avatar: "https://i.pravatar.cc/150?img=33",
-      email: "liam.johnson@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 18,
-      name: "Sophia Taylor",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "27",
-      avatar: "https://i.pravatar.cc/150?img=29",
-      email: "sophia.taylor@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 19,
-      name: "Lucas Harris",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "paused",
-      age: "32",
-      avatar: "https://i.pravatar.cc/150?img=50",
-      email: "lucas.harris@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-    {
-      id: 20,
-      name: "Mia Robinson",
-      role: getRandomRole(),
-      team: getRandomDepartment(),
-      status: "active",
-      age: "26",
-      avatar: "https://i.pravatar.cc/150?img=45",
-      email: "mia.robinson@example.com",
-      studentId: getRandomStudentId(),
-      score: getRandomScore(),
-    },
-  ];
-  
+
+];
 
 export function capitalize(s) {
     return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
@@ -407,15 +263,22 @@ const statusColorMap = {
     paused: "danger",
     vacation: "warning",
 };
+interface TablemangeProps {
+    selectedData: string | null;
+}
+const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions", "email", "score", "studentId"];
+const INITIAL_VISIBLE_COLUMNS_QUESTS = ["title", "name", "status", "actions", "description", "reward", "difficulty", "category", "image"];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions", "score","studentId"];
-
-export default function App() {
+const Tablemange: React.FC<TablemangeProps> = ({ selectedData }) => {
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
+    const [visibleColumnsQusets, setVisibleColumnsQusets] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS_QUESTS));
     const [statusFilter, setStatusFilter] = React.useState("all");
+    const [dataFilter, setDataFilter] = React.useState(new Set(["users"]));  // dataFilter เป็น Set
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [users, setUsers] = useState([]);
+    const [quests, setQuests] = useState([]);
     const [sortDescriptor, setSortDescriptor] = React.useState({
         column: "age",
         direction: "ascending",
@@ -425,13 +288,51 @@ export default function App() {
     const hasSearchFilter = Boolean(filterValue);
 
     const headerColumns = React.useMemo(() => {
-        if (visibleColumns === "all") return columns;
+        if (!dataFilter.has("users") ? visibleColumnsQusets : visibleColumns === "all") {
+            return !dataFilter.has("users") ? columnsQusets : columns;
+        }
 
-        return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-    }, [visibleColumns]);
+        if (!dataFilter.has("users") ? visibleColumnsQusets : visibleColumns instanceof Set) {
+            return !dataFilter.has("users")
+                ? columnsQusets.filter((column) => !dataFilter.has("users") ? visibleColumnsQusets : visibleColumns.has(column.uid))
+                : columns.filter((column) => !dataFilter.has("users") ? visibleColumnsQusets : visibleColumns.has(column.uid));
+        }
 
+        return []; // กรณีที่ visibleColumns ไม่ใช่ "all" และไม่ใช่ Set
+    }, [visibleColumns, dataFilter,visibleColumnsQusets]);
+
+    // ฟังก์ชันดึงข้อมูล users
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/users");
+            const data = await response.json();
+
+            // ดึงเฉพาะ results และตรวจสอบว่ามีข้อมูลหรือไม่
+            setUsers(data.results ?? []);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            setUsers([]); // ตั้งค่า users เป็นอาร์เรย์ว่างถ้ามี error
+        }
+    };
+    const fetchQuests = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/quests");
+            const data = await response.json();
+
+            // ดึงเฉพาะ results และตรวจสอบว่ามีข้อมูลหรือไม่
+            setQuests(data.results ?? []);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            setQuests([]); // ตั้งค่า users เป็นอาร์เรย์ว่างถ้ามี error
+        }
+    };
+    // โหลดข้อมูลจาก API ครั้งแรก
+    useEffect(() => {
+        fetchUsers();
+        fetchQuests();
+    }, []);
     const filteredItems = React.useMemo(() => {
-        let filteredUsers = [...users];
+        let filteredUsers = !dataFilter.has("users") ? quests : users;
 
         if (hasSearchFilter) {
             filteredUsers = filteredUsers.filter((user) =>
@@ -445,7 +346,7 @@ export default function App() {
         }
 
         return filteredUsers;
-    }, [users, filterValue, statusFilter]);
+    }, [users, quests, dataFilter, filterValue, statusFilter]);
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -467,16 +368,18 @@ export default function App() {
     }, [sortDescriptor, items]);
 
     const renderCell = React.useCallback((user, columnKey) => {
-        const cellValue = user[columnKey];
+        console.log(user);
+        console.log(columnKey);
 
+        const cellValue = user[columnKey];
         switch (columnKey) {
             case "name":
                 return (
                     <User
-                        avatarProps={{ radius: "lg", src: user.avatar }}
-                        description={<p className="text-base font-bold">{user.email}</p>}
+                        avatarProps={{ radius: "lg", src: user.profile_img }}
+                        description={<p className="text-base font-bold">{user.username}</p>}
                         name={<p className="text-base font-bold">{cellValue}</p>} // เพิ่มขนาดฟอนต์ของ name และทำให้เป็นตัวหนา
-                        >
+                    >
                         {user.email}
                     </User>
                 );
@@ -487,18 +390,25 @@ export default function App() {
                         <p className="text-bold text-small capitalize text-default-400">{user.team}</p>
                     </div>
                 );
+
+            case "reward":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-base capitalize">{cellValue} point</p>
+                    </div>
+                );
             case "score":
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-base capitalize">{cellValue} point</p>
                     </div>
                 );
-                case "studentId":
-                    return (
-                        <div className="flex flex-col">
-                            <p className="text-bold text-base capitalize">{cellValue}</p>
-                        </div>
-                    );
+            case "studentId":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-base capitalize">{cellValue}</p>
+                    </div>
+                );
             case "status":
                 return (
                     <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
@@ -562,6 +472,7 @@ export default function App() {
         return (
             <div className="flex flex-col gap-4">
                 <div className="flex justify-between gap-3 items-end">
+
                     <Input
                         isClearable
                         className="w-full sm:max-w-[44%]"
@@ -572,6 +483,25 @@ export default function App() {
                         onValueChange={onSearchChange}
                     />
                     <div className="flex gap-3">
+                        <Dropdown>
+                            <DropdownTrigger className="hidden sm:flex">
+                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                                    Data
+                                </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                                disallowEmptySelection
+                                aria-label="Table Columns"
+                                closeOnSelect={false}
+                                selectedKeys={dataFilter}
+                                selectionMode="single"
+                                onSelectionChange={setDataFilter}
+                            >
+                                <DropdownItem key="users" className="capitalize">ผู้ใช้งาน</DropdownItem>
+                                <DropdownItem key="qusets" className="capitalize">ภารกิจ</DropdownItem>
+
+                            </DropdownMenu>
+                        </Dropdown>
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
                                 <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
@@ -603,15 +533,22 @@ export default function App() {
                                 disallowEmptySelection
                                 aria-label="Table Columns"
                                 closeOnSelect={false}
-                                selectedKeys={visibleColumns}
+                                selectedKeys={!dataFilter.has("users") ? visibleColumnsQusets : visibleColumns}
                                 selectionMode="multiple"
-                                onSelectionChange={setVisibleColumns}
+                                onSelectionChange={!dataFilter.has("users") ? setVisibleColumnsQusets : setVisibleColumns}
                             >
-                                {columns.map((column) => (
-                                    <DropdownItem key={column.uid} className="capitalize">
-                                        {capitalize(column.name)}
-                                    </DropdownItem>
-                                ))}
+                                {!dataFilter.has("users")
+                                    ? (columnsQusets || []).map((column) => (
+                                        <DropdownItem key={column.uid} className="capitalize">
+                                            {capitalize(column.name)}
+                                        </DropdownItem>
+                                    ))
+                                    : (columns || []).map((column) => (
+                                        <DropdownItem key={column.uid} className="capitalize">
+                                            {capitalize(column.name)}
+                                        </DropdownItem>
+                                    ))
+                                }
                             </DropdownMenu>
                         </Dropdown>
                         <Button color="primary" endContent={<PlusIcon />}>
@@ -626,7 +563,7 @@ export default function App() {
                         <select
                             className="bg-transparent outline-none text-default-400 text-small"
                             defaultValue="10"
-                                                        onChange={onRowsPerPageChange}
+                            onChange={onRowsPerPageChange}
                         >
                             <option value="5">5</option>
                             <option value="10" >10</option>
@@ -644,6 +581,9 @@ export default function App() {
         users.length,
         onSearchChange,
         hasSearchFilter,
+        setDataFilter,
+        dataFilter,
+
     ]);
 
     const bottomContent = React.useMemo(() => {
@@ -675,15 +615,13 @@ export default function App() {
         );
     }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
+
     return (
         <Table
             isHeaderSticky
             aria-label="Example table with custom cells, pagination and sorting"
             bottomContent={bottomContent}
             bottomContentPlacement="outside"
-            classNames={{
-                wrapper: "max-h-[650px]",
-            }}
             selectedKeys={selectedKeys}
             selectionMode="multiple"
             sortDescriptor={sortDescriptor}
@@ -712,7 +650,8 @@ export default function App() {
             </TableBody>
         </Table>
     );
+
 }
 
-
+export default Tablemange;
 

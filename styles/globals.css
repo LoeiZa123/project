@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 @layer base {
+  .custom-listbox-item {
+    font-size: 20px; /* กำหนดขนาดตัวอักษร */
+  }
+  body {
+    font-size: 1.25rem; /* ขนาดตัวอักษรที่เท่ากับ text-xl (20px) */
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;

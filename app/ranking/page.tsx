@@ -2,46 +2,27 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Tableranking from "../../components/tableranking";  // ใช้ PascalCase สำหรับคอมโพเนนต์
-import { Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 
 export default function App() {
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState(null);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  // สมมุติข้อมูลผู้เล่น
- 
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
 
-    if (!userData) {
-      console.error('No user data found');
-      window.location.href = '/'; // ใช้ window.location แทน router.push
-      return;
-    }
-
-    try {
-      const parsedUser = JSON.parse(userData); // แปลงข้อมูลจาก JSON เป็น Object
-      setUser(parsedUser); // เก็บข้อมูลผู้ใช้ใน state
-    } catch (error) {
-      console.error('Failed to parse user data:', error.message);
-      window.location.href = '/'; // ถ้าข้อมูลเสียหาย ให้ไปที่หน้า login
-    }
-  }, []);
+  // ตรวจสอบว่าโค้ดทำงานใน client side
   useEffect(() => {
-    setIsClient(true); // ตั้งค่าเมื่อเป็นไคลเอนต์
+    setIsClient(true);  // ตั้งค่าหลังจากการ render ใน client
   }, []);
 
+  // หากยังไม่ทำการ render ใน client จะให้แสดงผลบางอย่างเช่น "Loading..."
   if (!isClient) {
-    return null; // หรือคืนค่า HTML ที่ไม่ขึ้นอยู่กับการทำงานของ window
+    return <div>Loading...</div>;
   }
 
   return (
-
     <Card>
       <CardBody>
         <Tableranking />
       </CardBody>
     </Card>
-
   );
 }
