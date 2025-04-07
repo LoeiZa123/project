@@ -48,15 +48,7 @@ export default function QuestsPage() {
             setQuests([]);
         }
     };
-    // ฟังก์ชันสำหรับกรอง quests โดยใช้ questslog
-    const deleteQuestFromList = (quests, questslog) => {
-        const completedQuestIds = questslog.map(log => log.quest_id);
-        return quests.filter(quest => !completedQuestIds.includes(quest.id));
-    };
-    const getCompletedQuests = (quests, questslog) => {
-        const completedQuestIds = questslog.map(log => log.quest_id);
-        return quests.filter(quest => completedQuestIds.includes(quest.id));
-    };
+    
     const acceptQuest = async (quest) => {
         Swal.fire({
             icon: 'question',
@@ -299,10 +291,7 @@ export default function QuestsPage() {
                                     />
                                     <span className="text-sm">ระดับความยาก: {quest.difficulty}</span>
                                 </div>
-                                <Button size="sm">
-                                    Continue
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
+                               
                             </CardFooter>
                         </Card>
                     ))}
@@ -503,7 +492,7 @@ export default function QuestsPage() {
                                 <span className="text-sm">ระดับความยาก: {quest.difficulty}</span>
                             </div>
                             <Button size="sm" variant="outline">
-                                View Details
+                                ดูลายละเอียด
                             </Button>
                         </CardFooter>
                     </Card>

@@ -2,7 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSessionContext } from '@/contexts/SessionContext';
-import { useRouter } from "next/navigation";
+import { useRouter} from "next/navigation";
+import { signIn,signOut } from "next-auth/react";
+
 import {
   Navbar,
   NavbarBrand,
@@ -56,7 +58,7 @@ export default function App() {
   }
   const menuItemspath = [
     { name: "หน้าหลัก", href: "/home" },
-    { name: "ภารกิจ", href: "/quest" },
+    { name: "ภารกิจ", href: "/myquests" },
     { name: "แดชบอร์ด", href: "/dashboard" },
     { name: "การจัดการ:", href: "/managementuser" },
     { name: "การจัดอันดับ", href: "/ranking" },
@@ -146,20 +148,16 @@ export default function App() {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{session.user?.email || 'No email available'}</p>
               </DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
-              <DropdownItem key="team_settings">ภารกิจของฉัน</DropdownItem>
-              <DropdownItem key="analytics">Analytics</DropdownItem>
-              <DropdownItem key="system">System</DropdownItem>
-              <DropdownItem key="configurations">Configurations</DropdownItem>
-              <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+              <DropdownItem key="profilepage"as="a" href='/myprofile'>โปรไฟล์</DropdownItem>
+              <DropdownItem key="settings">ตั้งค่า</DropdownItem>
               <DropdownItem key="logout" onPress={() => signOut()} color="danger">
-                Log Out
+                ออกจากระบบ
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         ) : (
           <Button className="text-default-500" onPress={() => signIn()} radius="full" variant="light">
-            Login
+            เข้าสู่ระบบ
           </Button>
         )}
       </NavbarContent>
