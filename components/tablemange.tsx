@@ -16,8 +16,19 @@ import {
     Chip,
     User,
     Pagination,
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    useDisclosure,
+    ModalFooter,
 } from "@heroui/react";
-
+import {
+    Plus,
+} from "lucide-react"
+import { Icon } from "@iconify/react";
+import { EditUserForm } from './edit-user-form';
+import { AddQuestModal } from "./add-quest-modal"
 export const columns = [
     { name: "ไอดี", uid: "id", sortable: true },
     { name: "ชื่อ-นามสกุล", uid: "name", sortable: true },
@@ -284,7 +295,44 @@ const Tablemange: React.FC<TablemangeProps> = ({ selectedData }) => {
         direction: "ascending",
     });
     const [page, setPage] = React.useState(1);
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onOpenChange: onConfirmOpenChange } = useDisclosure();
 
+
+    const handleAction = (key: React.Key, user: User) => {
+        if (key === "edit") {
+            setSelectedUser(user);
+            onOpen();
+        } else if (key === "delete") {
+            setSelectedUser(user);
+            onConfirmOpen();
+        }
+    };
+    const handleDelete = async (email: string) => {
+        const confirmed = confirm(`Are you sure you want to delete user with email ${email}?`);
+        if (!confirmed) return;
+
+        try {
+            const res = await fetch(`api/users/delete/${encodeURIComponent(email)}`, {
+                method: 'DELETE',
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to delete user');
+            }
+
+            setUsers(prev => prev.filter(user => user.email !== email));
+        } catch (error) {
+            alert('Delete failed: ' + error.message);
+        }
+    };
+
+    const handleDeleteConfirm = () => {
+        if (!selectedUser) return;
+        handleDelete(selectedUser.email);
+        onConfirmOpenChange(false);
+    };
     const hasSearchFilter = Boolean(filterValue);
 
     const headerColumns = React.useMemo(() => {
@@ -299,12 +347,12 @@ const Tablemange: React.FC<TablemangeProps> = ({ selectedData }) => {
         }
 
         return []; // กรณีที่ visibleColumns ไม่ใช่ "all" และไม่ใช่ Set
-    }, [visibleColumns, dataFilter,visibleColumnsQusets]);
+    }, [visibleColumns, dataFilter, visibleColumnsQusets]);
 
     // ฟังก์ชันดึงข้อมูล users
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/users");
+            const response = await fetch("api/users");
             const data = await response.json();
 
             // ดึงเฉพาะ results และตรวจสอบว่ามีข้อมูลหรือไม่
@@ -424,10 +472,13 @@ const Tablemange: React.FC<TablemangeProps> = ({ selectedData }) => {
                                     <VerticalDotsIcon className="text-default-300" />
                                 </Button>
                             </DropdownTrigger>
-                            <DropdownMenu>
+                            <DropdownMenu aria-label="User Actions Menu"
+                                onAction={(key) => handleAction(key, user)}>
                                 <DropdownItem key="view">View</DropdownItem>
-                                <DropdownItem key="edit">Edit</DropdownItem>
-                                <DropdownItem key="delete">Delete</DropdownItem>
+                                <DropdownItem key="edit">
+                                    Edit User
+                                </DropdownItem>
+                                <DropdownItem key="delete" className="text-danger" color="danger">Delete</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -551,9 +602,10 @@ const Tablemange: React.FC<TablemangeProps> = ({ selectedData }) => {
                                 }
                             </DropdownMenu>
                         </Dropdown>
-                        <Button color="primary" endContent={<PlusIcon />}>
-                            Add New
-                        </Button>
+
+                        {dataFilter.has("qusets") && <AddQuestModal />}
+
+
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -617,38 +669,78 @@ const Tablemange: React.FC<TablemangeProps> = ({ selectedData }) => {
 
 
     return (
-        <Table
-            isHeaderSticky
-            aria-label="Example table with custom cells, pagination and sorting"
-            bottomContent={bottomContent}
-            bottomContentPlacement="outside"
-            selectedKeys={selectedKeys}
-            selectionMode="multiple"
-            sortDescriptor={sortDescriptor}
-            topContent={topContent}
-            topContentPlacement="outside"
-            onSelectionChange={setSelectedKeys}
-            onSortChange={setSortDescriptor}
-        >
-            <TableHeader columns={headerColumns}>
-                {(column) => (
-                    <TableColumn
-                        key={column.uid}
-                        align={column.uid === "actions" ? "center" : "start"}
-                        allowsSorting={column.sortable}
-                    >
-                        {column.name}
-                    </TableColumn>
-                )}
-            </TableHeader>
-            <TableBody emptyContent={"No users found"} items={sortedItems}>
-                {(item) => (
-                    <TableRow key={item.id}>
-                        {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
+        <>
+            <Table
+                isHeaderSticky
+                aria-label="Example table with custom cells, pagination and sorting"
+                bottomContent={bottomContent}
+                bottomContentPlacement="outside"
+                selectedKeys={selectedKeys}
+                selectionMode="multiple"
+                sortDescriptor={sortDescriptor}
+                topContent={topContent}
+                topContentPlacement="outside"
+                onSelectionChange={setSelectedKeys}
+                onSortChange={setSortDescriptor}
+            >
+                <TableHeader columns={headerColumns}>
+                    {(column) => (
+                        <TableColumn
+                            key={column.uid}
+                            align={column.uid === "actions" ? "center" : "start"}
+                            allowsSorting={column.sortable}
+                        >
+                            {column.name}
+                        </TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody emptyContent={"No users found"} items={sortedItems}>
+                    {(item) => (
+                        <TableRow key={item.id}>
+                            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <Modal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                scrollBehavior="inside"
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">Edit User</ModalHeader>
+                            <ModalBody>
+                                {selectedUser && <EditUserForm user={selectedUser} onClose={onClose} />}
+                            </ModalBody>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+            {/* Modal ยืนยันลบ */}
+            <Modal isOpen={isConfirmOpen} onOpenChange={onConfirmOpenChange}>
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader>Confirm Delete</ModalHeader>
+                            <ModalBody>
+                                Are you sure you want to delete ?{" "}
+                                <strong>{selectedUser?.email}</strong>
+                            </ModalBody>
+                            <ModalFooter className="flex justify-end gap-2">
+                                <Button variant="light" onPress={() => onClose()}>
+                                    Cancel
+                                </Button>
+                                <Button color="danger" onPress={() => { handleDeleteConfirm(); onClose(); }}>
+                                    Delete
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+        </>
     );
 
 }

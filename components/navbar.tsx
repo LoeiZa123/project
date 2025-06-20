@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useSessionContext } from '@/contexts/SessionContext';
-import { useRouter} from "next/navigation";
-import { signIn,signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signIn, signOut } from "next-auth/react";
 
 import {
   Navbar,
@@ -148,8 +148,10 @@ export default function App() {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{session.user?.email || 'No email available'}</p>
               </DropdownItem>
-              <DropdownItem key="profilepage"as="a" href='/myprofile'>โปรไฟล์</DropdownItem>
-              <DropdownItem key="settings">ตั้งค่า</DropdownItem>
+              <DropdownItem onClick={() => router.push('/myprofile')}>
+                โปรไฟล์
+              </DropdownItem> 
+              <DropdownItem key="settings" as={Link} href='/settings'>ตั้งค่า</DropdownItem>
               <DropdownItem key="logout" onPress={() => signOut()} color="danger">
                 ออกจากระบบ
               </DropdownItem>

@@ -128,17 +128,17 @@ export default function ProfilePage() {
                             >
                                 Level 24
                             </Badge>
-                            <span className="text-muted-foreground">Joined {formattedDate}</span>
+                            <span className="text-muted-foreground">เข้าร่วม {formattedDate}</span>
                         </div>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" size="sm">
                             <Settings className="h-4 w-4 mr-2" />
-                            Settings
+                            ตั้งค่า
                         </Button>
                         <Button size="sm">
                             <Shield className="h-4 w-4 mr-2" />
-                            Guild Profile
+                            โปรไฟล์กิลด์
                         </Button>
                     </div>
                 </div>
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                     {/* Stats Tab */}
                     <TabsContent value="stats" className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {/*  <Card>
+                            {/*  <Card>
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-lg">Character Stats</CardTitle>
                                 </CardHeader>
@@ -266,35 +266,36 @@ export default function ProfilePage() {
 
                             <Card>
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-lg">Combat Stats</CardTitle>
+                                    <CardTitle className="text-lg">สถิติการคัดแยกขยะ</CardTitle>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
                                     <div className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">Quests Completed</span>
-                                        <span className="font-bold">47</span>
+                                        <span className="text-muted-foreground">จำนวนขยะที่คัดแยกแล้ว</span>
+                                        <span className="font-bold">128 ชิ้น</span>
                                     </div>
                                     <Separator />
                                     <div className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">Enemies Defeated</span>
-                                        <span className="font-bold">1,342</span>
+                                        <span className="text-muted-foreground">คะแนนรวมที่ได้รับ</span>
+                                        <span className="font-bold">3,240 คะแนน</span>
                                     </div>
                                     <Separator />
                                     <div className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">Bosses Slain</span>
-                                        <span className="font-bold">8</span>
+                                        <span className="text-muted-foreground">ขยะรีไซเคิลที่ส่งแล้ว</span>
+                                        <span className="font-bold">54 ชิ้น</span>
                                     </div>
                                     <Separator />
                                     <div className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">Highest Damage</span>
-                                        <span className="font-bold">4,872</span>
+                                        <span className="text-muted-foreground">ระดับปัจจุบัน</span>
+                                        <span className="font-bold">Eco Hero</span>
                                     </div>
                                     <Separator />
                                     <div className="flex justify-between items-center">
-                                        <span className="text-muted-foreground">PvP Wins</span>
-                                        <span className="font-bold">23</span>
+                                        <span className="text-muted-foreground">อันดับในวิทยาลัย</span>
+                                        <span className="font-bold">อันดับที่ 12</span>
                                     </div>
                                 </CardContent>
                             </Card>
+
                         </div>
                         {/*<Card>}
                         <Card>
@@ -357,54 +358,35 @@ export default function ProfilePage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Card>
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-lg">Recent Achievements</CardTitle>
+                                    <CardTitle className="text-lg">ความสำเร็จล่าสุด</CardTitle>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
-                                    <div className="flex items-start gap-4">
-                                        <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center dark:bg-yellow-900">
-                                            <Award className="h-5 w-5 text-yellow-700 dark:text-yellow-300" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-medium">Dragon Slayer</h3>
-                                            <p className="text-sm text-muted-foreground">Defeated your first dragon</p>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <Badge
-                                                    variant="secondary"
-                                                    className="bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
-                                                >
-                                                    500 XP
-                                                </Badge>
-                                                <span className="text-xs text-muted-foreground">3 days ago</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Separator />
-                                    <div className="flex items-start gap-4">
-                                        <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center dark:bg-purple-900">
-                                            <Award className="h-5 w-5 text-purple-700 dark:text-purple-300" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-medium">Master Alchemist</h3>
-                                            <p className="text-sm text-muted-foreground">Crafted 100 potions</p>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <Badge
-                                                    variant="secondary"
-                                                    className="bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
-                                                >
-                                                    250 XP
-                                                </Badge>
-                                                <span className="text-xs text-muted-foreground">1 week ago</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Separator />
                                     <div className="flex items-start gap-4">
                                         <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center dark:bg-green-900">
                                             <Award className="h-5 w-5 text-green-700 dark:text-green-300" />
                                         </div>
                                         <div>
-                                            <h3 className="font-medium">Explorer</h3>
-                                            <p className="text-sm text-muted-foreground">Discovered 50 locations</p>
+                                            <h3 className="font-medium">มือใหม่แยกขยะ</h3>
+                                            <p className="text-sm text-muted-foreground">คัดแยกขยะครั้งแรกสำเร็จ</p>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
+                                                >
+                                                    100 XP
+                                                </Badge>
+                                                <span className="text-xs text-muted-foreground">2 วันที่ผ่านมา</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Separator />
+                                    <div className="flex items-start gap-4">
+                                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center dark:bg-blue-900">
+                                            <Award className="h-5 w-5 text-blue-700 dark:text-blue-300" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-medium">นักรีไซเคิลมือโปร</h3>
+                                            <p className="text-sm text-muted-foreground">ส่งขยะรีไซเคิลครบ 50 ชิ้น</p>
                                             <div className="flex items-center gap-2 mt-1">
                                                 <Badge
                                                     variant="secondary"
@@ -412,58 +394,77 @@ export default function ProfilePage() {
                                                 >
                                                     300 XP
                                                 </Badge>
-                                                <span className="text-xs text-muted-foreground">2 weeks ago</span>
+                                                <span className="text-xs text-muted-foreground">5 วันที่ผ่านมา</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Separator />
+                                    <div className="flex items-start gap-4">
+                                        <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center dark:bg-yellow-900">
+                                            <Award className="h-5 w-5 text-yellow-700 dark:text-yellow-300" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-medium">แชมป์สะสมคะแนน</h3>
+                                            <p className="text-sm text-muted-foreground">สะสมแต้มครบ 1,000 คะแนน</p>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
+                                                >
+                                                    500 XP
+                                                </Badge>
+                                                <span className="text-xs text-muted-foreground">1 สัปดาห์ที่ผ่านมา</span>
                                             </div>
                                         </div>
                                     </div>
                                 </CardContent>
                                 <CardFooter>
                                     <Button variant="ghost" className="w-full">
-                                        View All Achievements
+                                        ดูความสำเร็จทั้งหมด
                                     </Button>
                                 </CardFooter>
                             </Card>
 
                             <Card>
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="text-lg">Achievement Progress</CardTitle>
+                                    <CardTitle className="text-lg">ความคืบหน้าของภารกิจ</CardTitle>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
-                                            <span>Dungeon Delver</span>
-                                            <span className="text-sm font-medium">15/20 dungeons</span>
+                                            <span>ภารกิจแยกขยะรายวัน</span>
+                                            <span className="text-sm font-medium">3/5 วัน</span>
                                         </div>
-                                        <Progress value={75} className="h-2" />
+                                        <Progress value={60} className="h-2" />
                                     </div>
                                     <Separator />
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
-                                            <span>Treasure Hunter</span>
-                                            <span className="text-sm font-medium">87/100 chests</span>
+                                            <span>ส่งขยะรีไซเคิล</span>
+                                            <span className="text-sm font-medium">87/100 ชิ้น</span>
                                         </div>
                                         <Progress value={87} className="h-2" />
                                     </div>
                                     <Separator />
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
-                                            <span>Monster Hunter</span>
-                                            <span className="text-sm font-medium">1342/2000 enemies</span>
+                                            <span>เชิญเพื่อนเข้าร่วม</span>
+                                            <span className="text-sm font-medium">6/10 คน</span>
                                         </div>
-                                        <Progress value={67.1} className="h-2" />
+                                        <Progress value={60} className="h-2" />
                                     </div>
                                     <Separator />
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
-                                            <span>Weapon Master</span>
-                                            <span className="text-sm font-medium">4/10 weapon types</span>
+                                            <span>สะสมคะแนน</span>
+                                            <span className="text-sm font-medium">1,200/2,000 XP</span>
                                         </div>
-                                        <Progress value={40} className="h-2" />
+                                        <Progress value={60} className="h-2" />
                                     </div>
                                 </CardContent>
                                 <CardFooter>
                                     <Button variant="ghost" className="w-full">
-                                        View All Progress
+                                        ดูภารกิจทั้งหมด
                                     </Button>
                                 </CardFooter>
                             </Card>
@@ -651,7 +652,7 @@ export default function ProfilePage() {
                     <TabsContent value="history" className="space-y-6">
                         <Card>
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-lg">Recent Activity</CardTitle>
+                                <CardTitle className="text-lg">กิจกรรมล่าสุด</CardTitle>
                             </CardHeader>
                             <CardContent className="grid gap-4">
                                 <div className="flex items-start gap-4">
@@ -659,9 +660,9 @@ export default function ProfilePage() {
                                         <Trophy className="h-5 w-5 text-blue-700 dark:text-blue-300" />
                                     </div>
                                     <div>
-                                        <h3 className="font-medium">Completed Quest: The Lost Artifact</h3>
+                                        <h3 className="font-medium">ส่งขยะรีไซเคิลครบ 10 ชิ้น</h3>
                                         <p className="text-sm text-muted-foreground">
-                                            Recovered the ancient artifact from the forgotten temple
+                                            คุณได้ส่งขยะประเภทพลาสติกครบตามเป้าหมายในสัปดาห์นี้
                                         </p>
                                         <div className="flex items-center gap-2 mt-1">
                                             <Badge
@@ -670,11 +671,12 @@ export default function ProfilePage() {
                                             >
                                                 +750 XP
                                             </Badge>
-                                            <span className="text-xs text-muted-foreground">2 days ago</span>
+                                            <span className="text-xs text-muted-foreground">2 วันที่ผ่านมา</span>
                                         </div>
                                     </div>
                                 </div>
                                 <Separator />
+
                                 <div className="flex items-start gap-4">
                                     <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center dark:bg-green-900">
                                         <svg
@@ -693,14 +695,15 @@ export default function ProfilePage() {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 className="font-medium">Leveled Up: Reached Level 24</h3>
-                                        <p className="text-sm text-muted-foreground">Gained +5 Strength, +3 Defense, +2 Intelligence</p>
+                                        <h3 className="font-medium">เลื่อนระดับเป็น Eco Warrior</h3>
+                                        <p className="text-sm text-muted-foreground">คุณได้รับเลเวลใหม่จากการทำกิจกรรมอย่างต่อเนื่อง</p>
                                         <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-xs text-muted-foreground">4 days ago</span>
+                                            <span className="text-xs text-muted-foreground">4 วันที่ผ่านมา</span>
                                         </div>
                                     </div>
                                 </div>
                                 <Separator />
+
                                 <div className="flex items-start gap-4">
                                     <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center dark:bg-purple-900">
                                         <svg
@@ -719,10 +722,8 @@ export default function ProfilePage() {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 className="font-medium">Discovered New Location: Dragon's Peak</h3>
-                                        <p className="text-sm text-muted-foreground">
-                                            Found a legendary dragon's lair in the Northern Mountains
-                                        </p>
+                                        <h3 className="font-medium">ค้นพบจุดทิ้งขยะใหม่: อาคาร A</h3>
+                                        <p className="text-sm text-muted-foreground">เพิ่มจุดให้บริการทิ้งขยะรีไซเคิลบริเวณอาคารเรียน</p>
                                         <div className="flex items-center gap-2 mt-1">
                                             <Badge
                                                 variant="secondary"
@@ -730,11 +731,12 @@ export default function ProfilePage() {
                                             >
                                                 +200 XP
                                             </Badge>
-                                            <span className="text-xs text-muted-foreground">1 week ago</span>
+                                            <span className="text-xs text-muted-foreground">1 สัปดาห์ที่ผ่านมา</span>
                                         </div>
                                     </div>
                                 </div>
                                 <Separator />
+
                                 <div className="flex items-start gap-4">
                                     <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center dark:bg-amber-900">
                                         <svg
@@ -753,23 +755,24 @@ export default function ProfilePage() {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 className="font-medium">Crafted Item: Dragonslayer Sword</h3>
+                                        <h3 className="font-medium">แลกของรางวัล: ถุงผ้ารักษ์โลก</h3>
                                         <p className="text-sm text-muted-foreground">
-                                            Used 5 Dragon Scales and 10 Enchanted Steel to forge a legendary weapon
+                                            ใช้แต้มสะสมแลกของรางวัลที่จุดบริการธนาคารขยะ
                                         </p>
                                         <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-xs text-muted-foreground">2 weeks ago</span>
+                                            <span className="text-xs text-muted-foreground">2 สัปดาห์ที่ผ่านมา</span>
                                         </div>
                                     </div>
                                 </div>
                             </CardContent>
                             <CardFooter>
                                 <Button variant="ghost" className="w-full">
-                                    View Full History
+                                    ดูประวัติกิจกรรมทั้งหมด
                                 </Button>
                             </CardFooter>
                         </Card>
                     </TabsContent>
+
                 </Tabs>
             </div>
         </div>
