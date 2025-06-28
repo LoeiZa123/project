@@ -132,14 +132,14 @@ export default function ProfilePage() {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                      {/*  <Button variant="outline" size="sm">
                             <Settings className="h-4 w-4 mr-2" />
                             ตั้งค่า
                         </Button>
                         <Button size="sm">
                             <Shield className="h-4 w-4 mr-2" />
                             โปรไฟล์กิลด์
-                        </Button>
+                        </Button>*/}
                     </div>
                 </div>
 

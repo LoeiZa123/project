@@ -59,7 +59,7 @@ export default function App() {
   const menuItemspath = [
     { name: "หน้าหลัก", href: "/home" },
     { name: "ภารกิจ", href: "/myquests" },
-    { name: "แดชบอร์ด", href: "/dashboard" },
+   // { name: "แดชบอร์ด", href: "/dashboard" },
     { name: "การจัดการ:", href: "/managementuser" },
     { name: "การจัดอันดับ", href: "/ranking" },
   ];

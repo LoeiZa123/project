@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button, } from "@heroui/react";
+import Swal from "sweetalert2";
 import {
     Dialog,
     DialogContent,
@@ -27,7 +28,7 @@ interface Objective {
 }
 
 interface Reward {
-    type: "xp" | "gold" | "item"
+    type: "xp" | "point" | "scores" | "gold" | "item"
     amount: number
     itemName?: string
 }
@@ -90,19 +91,51 @@ export function AddQuestModal() {
         setRewards(rewards.map((reward, i) => (i === index ? { ...reward, [field]: value } : reward)))
     }
 
-    const handleSubmit = () => {
-        // Here you would typically send the data to your API
-        console.log("Quest Data:", {
+    const handleSubmit = async () => {
+         console.log("Quest Data:", {
             ...questData,
             objectives: objectives.filter((obj) => obj.description.trim() !== ""),
             rewards: rewards.filter((reward) => reward.amount > 0),
         })
+        //return; // หยุดการทำงานชั่วคราวเพื่อดีบัก
+        const payload = {
+            ...questData,
+            objectives: objectives.filter((obj) => obj.description.trim() !== ""),
+            rewards: rewards.filter((reward) => reward.amount > 0),
+        };
 
-        // Reset form and close modal
-        setOpen(false)
-        // You could also show a success toast here
-    }
+        try {
+            // จำลองการส่งข้อมูล (แทนที่ด้วย API จริงได้เลย)
+            const res = await fetch("/api/quests/create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
 
+            if (!res.ok) throw new Error("Failed to create quest");
+
+            // ✅ แจ้งเตือนสำเร็จ
+            Swal.fire({
+                icon: "success",
+                title: "สร้างภารกิจสำเร็จ!",
+                text: "ภารกิจใหม่ของคุณถูกบันทึกแล้ว",
+                confirmButtonText: "ตกลง",
+            });
+
+           
+            setOpen(false);
+        } catch (err) {
+            console.error(err);
+
+            // ❌ แจ้งเตือนเมื่อเกิดข้อผิดพลาด
+            Swal.fire({
+                icon: "error",
+                title: "ไม่สามารถสร้างภารกิจได้",
+                text: "กรุณาลองใหม่ภายหลัง",
+                confirmButtonText: "ตกลง",
+            });
+        }
+    };
     const getDifficultyColor = (difficulty: string) => {
         switch (difficulty) {
             case "easy":
@@ -120,11 +153,11 @@ export function AddQuestModal() {
 
     const getTypeColor = (type: string) => {
         switch (type) {
-            case "main":
+            case "หลัก":
                 return "bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
-            case "side":
+            case "เสริม":
                 return "bg-purple-100 text-purple-700 hover:bg-purple-100 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-900"
-            case "guild":
+            case "รายวัน":
                 return "bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-900"
             case "legendary":
                 return "bg-red-100 text-red-700 hover:bg-red-100 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-900"
@@ -137,99 +170,111 @@ export function AddQuestModal() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
+            {/* ปุ่มที่ใช้เปิด Dialog */}
             <DialogTrigger asChild>
                 <Button
                     color="primary"
                     onClick={() => {
-                        setIsWaiting(true); // แสดงสถานะ loading
+                        setIsWaiting(true); // แสดงสถานะกำลังโหลด
                         setTimeout(() => {
-                            setIsWaiting(false);
-                            setIsOpen(true); // เปิด Dialog หลัง 1 วิ
+                            setIsWaiting(false); // หยุดแสดงโหลด
+                            setIsOpen(true); // เปิด Dialog หลังจากรอ 1 วินาที
                         }, 1000);
                     }}
-                    disabled={isWaiting}
+                    disabled={isWaiting} // ปิดการคลิกถ้ายังโหลดอยู่
                 >
                     {isWaiting ? "กำลังโหลด..." : (
                         <>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Add Quest
+                            <Plus className="h-4 w-4 mr-2" /> {/* ไอคอน + */}
+                            Add Quest {/* ข้อความบนปุ่ม */}
                         </>
                     )}
                 </Button>
             </DialogTrigger>
+
+            {/* กล่องเนื้อหาของ Dialog */}
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Create New Quest</DialogTitle>
+                    <DialogTitle>สร้างภารกิจใหม่</DialogTitle>
                     <DialogDescription>
-                        Add a new quest to the game. Fill in all the required information below.
+                        เพิ่มภารกิจใหม่เข้าสู่เกม กรอกข้อมูลที่จำเป็นด้านล่างให้ครบถ้วน
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="grid gap-6 py-4">
-                    {/* Basic Information */}
+                    {/* ข้อมูลเบื้องต้น */}
                     <Card>
                         <CardHeader className="pb-3">
-                            <CardTitle className="text-lg">Basic Information</CardTitle>
+                            <CardTitle className="text-lg">ข้อมูลเบื้องต้น</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="title">Quest Title *</Label>
+                                    <Label htmlFor="title">ชื่อภารกิจ *</Label>
                                     <Input
                                         id="title"
-                                        placeholder="Enter quest title"
+                                        placeholder="กรอกชื่อภารกิจ"
                                         value={questData.title}
-                                        onChange={(e) => setQuestData({ ...questData, title: e.target.value })}
+                                        onChange={(e) =>
+                                            setQuestData({ ...questData, title: e.target.value })
+                                        }
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="type">Quest Type *</Label>
-                                    <Select value={questData.type} onValueChange={(value) => setQuestData({ ...questData, type: value })}>
+                                    <Label htmlFor="type">ประเภทภารกิจ *</Label>
+                                    <Select
+                                        value={questData.type}
+                                        onValueChange={(value) =>
+                                            setQuestData({ ...questData, type: value })
+                                        }
+                                    >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select quest type" />
+                                            <SelectValue placeholder="เลือกประเภทภารกิจ" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="main">Main Quest</SelectItem>
-                                            <SelectItem value="side">Side Quest</SelectItem>
-                                            <SelectItem value="guild">Guild Quest</SelectItem>
-                                            <SelectItem value="legendary">Legendary Quest</SelectItem>
-                                            <SelectItem value="daily">Daily Quest</SelectItem>
+                                            <SelectItem value="หลัก">ภารกิจหลัก</SelectItem>
+                                            <SelectItem value="เสริม">ภารกิจเสริม</SelectItem>
+                                            <SelectItem value="รายวัน">ภารกิจรายวัน</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="description">Description *</Label>
+                                <Label htmlFor="description">คำอธิบาย *</Label>
                                 <Textarea
                                     id="description"
-                                    placeholder="Enter quest description"
+                                    placeholder="กรอกรายละเอียดภารกิจ"
                                     value={questData.description}
-                                    onChange={(e) => setQuestData({ ...questData, description: e.target.value })}
+                                    onChange={(e) =>
+                                        setQuestData({ ...questData, description: e.target.value })
+                                    }
                                     rows={3}
                                 />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="difficulty">Difficulty *</Label>
+                                    <Label htmlFor="difficulty">ระดับความยาก *</Label>
                                     <Select
                                         value={questData.difficulty}
-                                        onValueChange={(value) => setQuestData({ ...questData, difficulty: value })}
+                                        onValueChange={(value) =>
+                                            setQuestData({ ...questData, difficulty: value })
+                                        }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select difficulty" />
+                                            <SelectValue placeholder="เลือกระดับความยาก" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="easy">Easy</SelectItem>
-                                            <SelectItem value="medium">Medium</SelectItem>
-                                            <SelectItem value="hard">Hard</SelectItem>
-                                            <SelectItem value="extreme">Extreme</SelectItem>
+                                            <SelectItem value="easy">ง่าย</SelectItem>
+                                            <SelectItem value="medium">ปานกลาง</SelectItem>
+                                            <SelectItem value="hard">ยาก</SelectItem>
+                                            <SelectItem value="extreme">โหดสุด</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="requiredLevel">Required Level</Label>
+                                    <Label htmlFor="requiredLevel">เลเวลที่ต้องการ</Label>
                                     <Input
                                         id="requiredLevel"
                                         type="number"
@@ -237,92 +282,118 @@ export function AddQuestModal() {
                                         max="50"
                                         value={questData.requiredLevel}
                                         onChange={(e) =>
-                                            setQuestData({ ...questData, requiredLevel: Number.parseInt(e.target.value) || 1 })
+                                            setQuestData({
+                                                ...questData,
+                                                requiredLevel: Number.parseInt(e.target.value) || 1,
+                                            })
                                         }
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="maxPlayers">Max Players</Label>
+                                    <Label htmlFor="maxPlayers">จำนวนผู้เล่นสูงสุด</Label>
                                     <Input
                                         id="maxPlayers"
                                         type="number"
                                         min="1"
                                         max="10"
                                         value={questData.maxPlayers}
-                                        onChange={(e) => setQuestData({ ...questData, maxPlayers: Number.parseInt(e.target.value) || 1 })}
+                                        onChange={(e) =>
+                                            setQuestData({
+                                                ...questData,
+                                                maxPlayers: Number.parseInt(e.target.value) || 1,
+                                            })
+                                        }
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="location">Location</Label>
+                                    <Label htmlFor="location">สถานที่</Label>
                                     <Input
                                         id="location"
-                                        placeholder="e.g., Eastern Highlands - Forgotten Temple"
+                                        placeholder="เช่น ที่ราบตะวันออก - วิหารต้องสาป"
                                         value={questData.location}
-                                        onChange={(e) => setQuestData({ ...questData, location: e.target.value })}
+                                        onChange={(e) =>
+                                            setQuestData({ ...questData, location: e.target.value })
+                                        }
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="category">Category</Label>
+                                    <Label htmlFor="category">หมวดหมู่</Label>
                                     <Select
                                         value={questData.category}
-                                        onValueChange={(value) => setQuestData({ ...questData, category: value })}
+                                        onValueChange={(value) =>
+                                            setQuestData({ ...questData, category: value })
+                                        }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select category" />
+                                            <SelectValue placeholder="เลือกหมวดหมู่" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="adventure">Adventure</SelectItem>
-                                            <SelectItem value="combat">Combat</SelectItem>
-                                            <SelectItem value="exploration">Exploration</SelectItem>
-                                            <SelectItem value="crafting">Crafting</SelectItem>
-                                            <SelectItem value="social">Social</SelectItem>
-                                            <SelectItem value="puzzle">Puzzle</SelectItem>
+                                            <SelectItem value="adventure">ผจญภัย</SelectItem>
+                                            <SelectItem value="combat">ต่อสู้</SelectItem>
+                                            <SelectItem value="exploration">สำรวจ</SelectItem>
+                                            <SelectItem value="crafting">ประดิษฐ์</SelectItem>
+                                            <SelectItem value="social">สังคม</SelectItem>
+                                            <SelectItem value="puzzle">ปริศนา</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                             </div>
 
+
+
                             <div className="flex items-center space-x-4">
+                                {/* กลุ่มตัวเลือก "Time Limited" */}
                                 <div className="flex items-center space-x-2">
                                     <Switch
                                         id="isTimeLimited"
                                         checked={questData.isTimeLimited}
-                                        onCheckedChange={(checked) => setQuestData({ ...questData, isTimeLimited: checked })}
+                                        onCheckedChange={(checked) =>
+                                            setQuestData({ ...questData, isTimeLimited: checked })
+                                        }
                                     />
-                                    <Label htmlFor="isTimeLimited">Time Limited</Label>
+                                    <Label htmlFor="isTimeLimited">จำกัดเวลา</Label>
                                 </div>
+
+                                {/* ถ้าเลือกให้จำกัดเวลา จะแสดงช่องให้กรอกระยะเวลา */}
                                 {questData.isTimeLimited && (
                                     <div className="space-y-2">
                                         <Input
-                                            placeholder="e.g., 2 days, 1 week"
+                                            placeholder="เช่น 2 วัน, 1 สัปดาห์"
                                             value={questData.timeLimit}
-                                            onChange={(e) => setQuestData({ ...questData, timeLimit: e.target.value })}
+                                            onChange={(e) =>
+                                                setQuestData({ ...questData, timeLimit: e.target.value })
+                                            }
                                         />
                                     </div>
                                 )}
+
+                                {/* ตัวเลือกเปิด/ปิดสถานะ Active */}
                                 <div className="flex items-center space-x-2">
                                     <Switch
                                         id="isActive"
                                         checked={questData.isActive}
-                                        onCheckedChange={(checked) => setQuestData({ ...questData, isActive: checked })}
+                                        onCheckedChange={(checked) =>
+                                            setQuestData({ ...questData, isActive: checked })
+                                        }
                                     />
-                                    <Label htmlFor="isActive">Active</Label>
+                                    <Label htmlFor="isActive">เปิดใช้งาน</Label>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
 
-                    {/* Objectives */}
+                        </CardContent >
+                    </Card >
+
+                    {/* วัตถุประสงค์ของภารกิจ 
                     <Card>
                         <CardHeader className="pb-3">
                             <div className="flex justify-between items-center">
-                                <CardTitle className="text-lg">Quest Objectives</CardTitle>
+                                <CardTitle className="text-lg">เป้าหมายภารกิจ</CardTitle>
                                 <Button variant="outline" size="sm" onClick={addObjective}>
                                     <Plus className="h-4 w-4 mr-1" />
-                                    Add Objective
+                                    เพิ่มเป้าหมาย
                                 </Button>
                             </div>
                         </CardHeader>
@@ -333,7 +404,7 @@ export function AddQuestModal() {
                                         {index + 1}
                                     </div>
                                     <Input
-                                        placeholder="Enter objective description"
+                                        placeholder="กรอกรายละเอียดเป้าหมาย"
                                         value={objective.description}
                                         onChange={(e) => updateObjective(objective.id, e.target.value)}
                                         className="flex-1"
@@ -351,48 +422,59 @@ export function AddQuestModal() {
                                 </div>
                             ))}
                         </CardContent>
-                    </Card>
+                    </Card>*/}
 
-                    {/* Rewards */}
+
+                    {/* รางวัลของภารกิจ */}
                     <Card>
                         <CardHeader className="pb-3">
                             <div className="flex justify-between items-center">
-                                <CardTitle className="text-lg">Quest Rewards</CardTitle>
+                                <CardTitle className="text-lg">รางวัลภารกิจ</CardTitle>
                                 <Button variant="outline" size="sm" onClick={addReward}>
                                     <Plus className="h-4 w-4 mr-1" />
-                                    Add Reward
+                                    เพิ่มรางวัล
                                 </Button>
                             </div>
                         </CardHeader>
                         <CardContent className="space-y-3">
                             {rewards.map((reward, index) => (
                                 <div key={index} className="flex items-center gap-3">
-                                    <Select value={reward.type} onValueChange={(value) => updateReward(index, "type", value)}>
+                                    <Select
+                                        value={reward.type}
+                                        onValueChange={(value) => updateReward(index, "type", value)}
+                                    >
                                         <SelectTrigger className="w-32">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="xp">XP</SelectItem>
-                                            <SelectItem value="gold">Gold</SelectItem>
-                                            <SelectItem value="item">Item</SelectItem>
+                                            <SelectItem value="point">Points</SelectItem>
+                                            <SelectItem value="scores">Scores</SelectItem>
+
                                         </SelectContent>
                                     </Select>
+
                                     <Input
                                         type="number"
-                                        placeholder="Amount"
+                                        placeholder="จำนวน"
                                         value={reward.amount}
-                                        onChange={(e) => updateReward(index, "amount", Number.parseInt(e.target.value) || 0)}
+                                        onChange={(e) =>
+                                            updateReward(index, "amount", Number.parseInt(e.target.value) || 0)
+                                        }
                                         className="w-24"
                                     />
-                                    {reward.type === "item" && (
+
+                                    {reward.type === "item" ? (
                                         <Input
-                                            placeholder="Item name"
+                                            placeholder="ชื่อไอเทม"
                                             value={reward.itemName || ""}
                                             onChange={(e) => updateReward(index, "itemName", e.target.value)}
                                             className="flex-1"
                                         />
+                                    ) : (
+                                        <div className="flex-1" />
                                     )}
-                                    {reward.type !== "item" && <div className="flex-1" />}
+
                                     {rewards.length > 1 && (
                                         <Button
                                             variant="ghost"
@@ -408,19 +490,24 @@ export function AddQuestModal() {
                         </CardContent>
                     </Card>
 
-                    {/* Preview */}
+
+                    {/* แสดงตัวอย่างภารกิจ */}
                     <Card>
                         <CardHeader className="pb-3">
-                            <CardTitle className="text-lg">Preview</CardTitle>
+                            <CardTitle className="text-lg">แสดงตัวอย่าง</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="border rounded-lg p-4 bg-muted/20">
+                                {/* หัวข้อภารกิจ */}
                                 <div className="flex justify-between items-start mb-3">
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">
+                                            {/* ประเภทภารกิจ */}
                                             <Badge variant="secondary" className={getTypeColor(questData.type)}>
-                                                {questData.type.charAt(0).toUpperCase() + questData.type.slice(1)} Quest
+                                                ภารกิจ{questData.type.charAt(0).toUpperCase() + questData.type.slice(1)}
                                             </Badge>
+
+                                            {/* จำกัดเวลา */}
                                             {questData.isTimeLimited && questData.timeLimit && (
                                                 <Badge
                                                     variant="outline"
@@ -431,33 +518,28 @@ export function AddQuestModal() {
                                                 </Badge>
                                             )}
                                         </div>
-                                        <h3 className="text-lg font-semibold">{questData.title || "Quest Title"}</h3>
+                                        <h3 className="text-lg font-semibold">{questData.title || "ชื่อภารกิจ"}</h3>
                                         <p className="text-sm text-muted-foreground mt-1">
-                                            {questData.description || "Quest description will appear here"}
+                                            {questData.description || "รายละเอียดภารกิจจะแสดงที่นี่"}
                                         </p>
                                     </div>
+
+                                    {/* ความยาก (ดาว) */}
                                     <div className="flex items-center gap-1">
                                         {[1, 2, 3, 4, 5].map((star) => (
                                             <Star
                                                 key={star}
-                                                className={`h-4 w-4 ${star <=
-                                                    (
-                                                        questData.difficulty === "easy"
-                                                            ? 1
-                                                            : questData.difficulty === "medium"
-                                                                ? 2
-                                                                : questData.difficulty === "hard"
-                                                                    ? 3
-                                                                    : 5
-                                                    )
-                                                    ? "fill-yellow-400 text-yellow-400"
-                                                    : "text-muted-foreground"
-                                                    }`}
+                                                className={`h-4 w-4 ${star <= (
+                                                    questData.difficulty === "easy" ? 1 :
+                                                        questData.difficulty === "medium" ? 2 :
+                                                            questData.difficulty === "hard" ? 3 : 5
+                                                ) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
                                             />
                                         ))}
                                     </div>
                                 </div>
 
+                                {/* สถานที่ */}
                                 {questData.location && (
                                     <div className="flex items-center gap-2 mb-3">
                                         <div className="h-6 w-6 rounded-full bg-blue-100 flex items-center justify-center dark:bg-blue-900">
@@ -467,9 +549,10 @@ export function AddQuestModal() {
                                     </div>
                                 )}
 
+                                {/* เป้าหมาย */}
                                 {objectives.some((obj) => obj.description.trim() !== "") && (
                                     <div className="space-y-2 mb-3">
-                                        <h4 className="text-sm font-medium">Objectives:</h4>
+                                        <h4 className="text-sm font-medium">เป้าหมาย:</h4>
                                         {objectives
                                             .filter((obj) => obj.description.trim() !== "")
                                             .map((objective, index) => (
@@ -483,6 +566,7 @@ export function AddQuestModal() {
                                     </div>
                                 )}
 
+                                {/* รางวัล */}
                                 {rewards.some((reward) => reward.amount > 0) && (
                                     <div className="flex items-center gap-3 mt-3">
                                         {rewards
@@ -490,62 +574,53 @@ export function AddQuestModal() {
                                             .map((reward, index) => (
                                                 <div key={index} className="flex items-center gap-1">
                                                     {reward.type === "xp" && <Trophy className="h-4 w-4 text-blue-600" />}
-                                                    {reward.type === "gold" && (
+                                                    {reward.type === "point" && (
                                                         <svg className="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
-                                                            <path
-                                                                fillRule="evenodd"
-                                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                                                clipRule="evenodd"
-                                                            ></path>
+                                                            <path d="..." />
                                                         </svg>
                                                     )}
-                                                    {reward.type === "item" && (
+                                                    {reward.type === "scores" && (
                                                         <svg className="h-4 w-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"></path>
+                                                            <path d="..." />
                                                         </svg>
                                                     )}
                                                     <span className="text-sm">
-                                                        {reward.amount}{" "}
-                                                        {reward.type === "item" ? reward.itemName || "Item" : reward.type.toUpperCase()}
+                                                        {reward.amount} {reward.type === "item" ? reward.itemName || "Item" : reward.type.toUpperCase()}
                                                     </span>
                                                 </div>
                                             ))}
                                     </div>
                                 )}
 
+                                {/* ระดับความยาก & เลเวลที่ต้องการ */}
                                 <div className="flex justify-between items-center mt-4 pt-3 border-t">
                                     <div className="flex items-center gap-2">
                                         <svg className="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                                            />
+                                            <path d="..." />
                                         </svg>
                                         <span className="text-sm">
-                                            Difficulty: {questData.difficulty.charAt(0).toUpperCase() + questData.difficulty.slice(1)}
+                                            ความยาก: {questData.difficulty.charAt(0).toUpperCase() + questData.difficulty.slice(1)}
                                         </span>
                                     </div>
                                     <Badge variant="outline" className={getDifficultyColor(questData.difficulty)}>
-                                        Level {questData.requiredLevel}+
+                                        เลเวล {questData.requiredLevel}+
                                     </Badge>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
-                </div>
+
+                </div >
 
                 <DialogFooter>
                     <Button variant="outline" onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} disabled={!questData.title || !questData.description}>
+                    <Button onClick={handleSubmit}>
                         Create Quest
                     </Button>
                 </DialogFooter>
-            </DialogContent>
-        </Dialog>
+            </DialogContent >
+        </Dialog >
     )
 }

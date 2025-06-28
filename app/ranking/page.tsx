@@ -115,8 +115,8 @@ export default function RankingsPage() {
                 <Tabs defaultValue="overall" className="w-full">
                     <TabsList className="mb-6">
                         <TabsTrigger value="overall">ภาพรวม</TabsTrigger>
-                        <TabsTrigger value="quests">ภารกิจ</TabsTrigger>
-                        <TabsTrigger value="guild">กิลด์</TabsTrigger>
+                       {/* Tabs  <TabsTrigger value="quests">ภารกิจ</TabsTrigger>
+                        <TabsTrigger value="guild">กิลด์</TabsTrigger>*/}
                     </TabsList>
 
                     {/* Overall Rankings Tab */}
